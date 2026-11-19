@@ -1,4 +1,7 @@
-import { Activity, ArrowDownRight, CalendarDays, Plane } from "lucide-react";
+"use client";
+
+import { Activity, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -8,6 +11,12 @@ const projects = [
     title: "WellFly – Flight Booking App",
     description: "An Expedia-inspired flight booking application.",
     technologies: ["Flutter", "Dart", "Flight API"],
+    overview: "An Expedia-inspired flight booking application.",
+    features: ["Flight booking experience"],
+    challenges: "Challenge details are not included in the available project information.",
+    contribution: "Contribution details are not included in the available project information.",
+    githubUrl: "",
+    liveUrl: "",
     kind: "flight",
     Icon: Plane,
     accent: "text-blue",
@@ -17,6 +26,12 @@ const projects = [
     description:
       "A student productivity app for schedules, GPA calculation, assignments, and notes.",
     technologies: ["Flutter", "Dart", "Hive"],
+    overview: "A student productivity app for managing academic routines and coursework.",
+    features: ["Schedules", "GPA calculation", "Assignments", "Notes"],
+    challenges: "Challenge details are not included in the available project information.",
+    contribution: "Contribution details are not included in the available project information.",
+    githubUrl: "",
+    liveUrl: "",
     kind: "student",
     Icon: CalendarDays,
     accent: "text-purple",
@@ -26,6 +41,12 @@ const projects = [
     description:
       "A web-based system for tracking citizen complaints, responses, and department performance.",
     technologies: ["HTML", "CSS", "JavaScript"],
+    overview: "A web-based system for tracking citizen complaints, responses, and department performance.",
+    features: ["Complaint tracking", "Response monitoring", "Department performance tracking"],
+    challenges: "Challenge details are not included in the available project information.",
+    contribution: "Contribution details are not included in the available project information.",
+    githubUrl: "",
+    liveUrl: "",
     kind: "monitoring",
     Icon: Activity,
     accent: "text-blue",
@@ -153,6 +174,22 @@ function ProjectVisual({ kind }: { kind: ProjectKind }) {
 }
 
 export function ProjectsSection() {
+  const [selectedProject, setSelectedProject] = useState<ProjectKind | null>(null);
+  const selected = projects.find((project) => project.kind === selectedProject);
+
+  useEffect(() => {
+    if (!selected) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedProject(null);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = "";
+    };
+  }, [selected]);
+
   return (
     <section
       id="projects"
@@ -169,10 +206,10 @@ export function ProjectsSection() {
           />
         </AnimatedReveal>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
           {projects.map(({ title, description, technologies, kind, Icon, accent }, index) => (
             <AnimatedReveal key={title} delay={0.08 + index * 0.1} className="h-full" tilt>
-              <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface/65 shadow-[0_16px_50px_rgb(0_0_0_/_14%)] transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1.5 hover:border-purple/55 hover:shadow-[0_24px_65px_rgb(0_0_0_/_28%),0_0_38px_rgb(139_92_246_/_12%)]">
+              <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-surface/65 shadow-[0_16px_50px_rgb(0_0_0_/_14%)] transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:border-purple/55 hover:shadow-[0_24px_65px_rgb(0_0_0_/_28%),0_0_38px_rgb(139_92_246_/_16%)]">
                 <ProjectVisual kind={kind} />
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <div className="mb-3 flex items-start gap-3">
@@ -181,7 +218,7 @@ export function ProjectsSection() {
                     </span>
                     <h3 className="mb-0 pt-1 text-lg leading-snug tracking-tight transition-colors duration-200 group-hover:text-white">{title}</h3>
                   </div>
-                  <p className="mb-5 text-sm leading-6 transition-colors duration-200 group-hover:text-slate-300">{description}</p>
+                  <p className="mb-6 text-sm leading-6 text-slate-400 transition-colors duration-200 group-hover:text-slate-300">{description}</p>
                   <ul className="mt-auto flex list-none flex-wrap gap-2 p-0" aria-label={`${title} technologies`}>
                     {technologies.map((technology) => (
                       <li
@@ -192,12 +229,53 @@ export function ProjectsSection() {
                       </li>
                     ))}
                   </ul>
+                  <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-white/[0.07] pt-5">
+                    <button type="button" onClick={() => setSelectedProject(kind)} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-gradient-to-r from-purple to-blue px-4 text-sm font-semibold text-white shadow-[0_0_24px_rgb(139_92_246_/_18%)] transition hover:shadow-[0_0_30px_rgb(139_92_246_/_32%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+                      Explore project <ArrowDownRight size={15} aria-hidden="true" />
+                    </button>
+                    {projects[index].githubUrl ? <a href={projects[index].githubUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-slate-300 transition hover:border-purple/60 hover:text-white"><CodeXml size={15} aria-hidden="true" /> GitHub</a> : null}
+                    {projects[index].liveUrl ? <a href={projects[index].liveUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-slate-300 transition hover:border-blue/60 hover:text-white"><ExternalLink size={15} aria-hidden="true" /> Live demo</a> : null}
+                  </div>
                 </div>
               </article>
             </AnimatedReveal>
           ))}
         </div>
       </Container>
+      {selected ? (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-md sm:items-center sm:p-5" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedProject(null); }}>
+          <section role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" className="max-h-[92dvh] w-full max-w-4xl overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0c0e18] shadow-[0_30px_100px_rgb(0_0_0_/_65%)] sm:rounded-3xl">
+            <header className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.07] bg-[#0c0e18]/90 px-5 py-4 backdrop-blur sm:px-8">
+              <p className="mb-0 text-xs font-semibold uppercase tracking-[0.2em] text-blue">Project details</p>
+              <button autoFocus onClick={() => setSelectedProject(null)} aria-label="Close project details" className="flex size-10 items-center justify-center rounded-full border border-white/10 text-slate-300 transition hover:border-purple/60 hover:text-white"><X size={18} /></button>
+            </header>
+            <div className="p-5 sm:p-8">
+              <h2 id="project-dialog-title" className="mb-3 text-2xl sm:text-4xl">{selected.title}</h2>
+              <p className="mb-7 max-w-2xl text-base leading-7">{selected.overview}</p>
+              <div className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0e19] [&>div]:h-64 [&>div]:border-b-0 sm:[&>div]:h-80">
+                <ProjectVisual kind={selected.kind} />
+              </div>
+              <div className="grid gap-7 sm:grid-cols-2">
+                <div>
+                  <h3 className="mb-3 text-lg">Key features</h3>
+                  <ul className="space-y-2 text-sm text-slate-300">{selected.features.map((feature) => <li key={feature} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-purple" />{feature}</li>)}</ul>
+                </div>
+                <div>
+                  <h3 className="mb-3 text-lg">Technologies</h3>
+                  <ul className="flex flex-wrap gap-2">{selected.technologies.map((technology) => <li key={technology} className="rounded-full border border-purple/20 bg-purple/[0.08] px-3 py-1.5 text-xs font-medium text-slate-200">{technology}</li>)}</ul>
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg">Challenges</h3><p className="mb-0 text-sm leading-6">{selected.challenges}</p>
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg">My contribution</h3><p className="mb-0 text-sm leading-6">{selected.contribution}</p>
+                </div>
+              </div>
+              {(selected.githubUrl || selected.liveUrl) ? <div className="mt-8 flex flex-wrap gap-3">{selected.githubUrl ? <a href={selected.githubUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-semibold hover:border-purple/60"><CodeXml size={16} /> GitHub</a> : null}{selected.liveUrl ? <a href={selected.liveUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-5 text-sm font-semibold text-white"><ExternalLink size={16} /> Live demo</a> : null}</div> : null}
+            </div>
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }
