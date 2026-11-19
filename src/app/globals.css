@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #08090f;
+  --surface: #111827;
+  --purple: #8b5cf6;
+  --blue: #38bdf8;
+  --foreground: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border: #263044;
+  --font-sans-system: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono-system: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --content-width: 72rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-purple: var(--purple);
+  --color-blue: var(--blue);
+  --color-foreground: var(--foreground);
+  --color-secondary: var(--text-secondary);
+  --color-border: var(--border);
+  --font-sans: var(--font-sans-system);
+  --font-mono: var(--font-mono-system);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  background: var(--background);
+  scroll-padding-top: 5rem;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: clip;
+  background:
+    radial-gradient(ellipse at 12% 2%, rgb(139 92 246 / 12%), transparent 34rem),
+    radial-gradient(ellipse at 90% 18%, rgb(56 189 248 / 9%), transparent 30rem),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans-system);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background-image: linear-gradient(rgb(255 255 255 / 1.2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 1.2%) 1px, transparent 1px);
+  background-size: 64px 64px;
+  content: "";
+  mask-image: linear-gradient(to bottom, black, transparent 75%);
+  pointer-events: none;
+}
+
+::selection {
+  background: rgb(139 92 246 / 38%);
+  color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--foreground);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 7vw, 5.75rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+h3 {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: inherit;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+    background-size: 100% 100%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+    background-size: 200% 200%;
+  }
+}
+
+.gradient-shift {
+  background-size: 100% 100%;
+  animation: gradient-shift 12s ease-in-out infinite;
+}
+
+.ambient-mesh {
+  background:
+    radial-gradient(ellipse at 18% 22%, rgb(139 92 246 / 9%), transparent 38%),
+    radial-gradient(ellipse at 82% 38%, rgb(56 189 248 / 7%), transparent 42%),
+    radial-gradient(ellipse at 48% 88%, rgb(139 92 246 / 5%), transparent 38%);
+  opacity: 0.7;
+  transform: scale(1.04);
+  will-change: transform;
+  animation: ambient-mesh-drift 32s ease-in-out infinite alternate;
+}
+
+@keyframes ambient-mesh-drift {
+  from {
+    transform: scale(1.04) translate3d(-0.5%, -0.5%, 0);
+  }
+
+  to {
+    transform: scale(1.08) translate3d(0.5%, 0.5%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  .main-nav-link::after {
+    position: absolute;
+    right: 0.875rem;
+    bottom: 0.35rem;
+    left: 0.875rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--purple), var(--blue));
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
+
+  .main-nav-link:hover::after,
+  .main-nav-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .gradient-shift {
+    background-position: 0% 50%;
+    background-size: 100% 100%;
+    animation: none;
+  }
+
+  .ambient-mesh {
+    animation: none;
+  }
+}
