@@ -11,6 +11,7 @@ import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ParticleUniverse } from "@/components/layout/particle-universe";
 import { FixedOrbitBackground } from "@/components/layout/fixed-orbit-background";
+import { AmbientAugmentation } from "@/components/layout/ambient-augmentation";
 
 export function SiteEffects() {
   const shouldReduceMotion = useReducedMotion() ?? false;
@@ -36,6 +37,7 @@ export function SiteEffects() {
       <FixedOrbitBackground />
       <div aria-hidden="true" className="cinematic-aurora pointer-events-none fixed inset-0 -z-10" />
       <ParticleUniverse />
+      <AmbientAugmentation />
       <AnimatePresence>
         {showBackToTop ? (
           <motion.button

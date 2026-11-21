@@ -27,6 +27,7 @@ export function FixedOrbitBackground() {
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--inner" />
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--outer" />
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--cross" />
+      <div className="fixed-orbit-background__ring fixed-orbit-background__ring--grand" />
       <svg aria-hidden="true" className="fixed-orbit-background__energy-wave fixed-orbit-background__energy-wave--one" viewBox="0 0 1200 800" preserveAspectRatio="none" fill="none">
         <defs><linearGradient id="fixed-energy-gradient-a" x1="0" y1="0" x2="1200" y2="800" gradientUnits="userSpaceOnUse"><stop stopColor="#8b5cf6" stopOpacity=".08" /><stop offset=".35" stopColor="#8b5cf6" stopOpacity=".78" /><stop offset=".62" stopColor="#38bdf8" stopOpacity=".86" /><stop offset="1" stopColor="#38bdf8" stopOpacity=".06" /></linearGradient></defs>
         <ellipse className="fixed-orbit-background__energy-trace" cx="600" cy="400" rx="550" ry="286" stroke="url(#fixed-energy-gradient-a)" strokeWidth="2.2" />

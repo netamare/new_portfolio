@@ -156,46 +156,60 @@ a {
 }
 
 .fixed-orbit-background__ring--wide {
-  width: min(112vw, 92rem);
-  height: min(88vh, 68rem);
-  border-color: rgb(139 92 246 / 30%);
-  box-shadow: 0 0 45px rgb(139 92 246 / 8%), inset 0 0 40px rgb(56 189 248 / 5%);
+  width: min(188vw, 154rem);
+  height: min(140vh, 110rem);
+  border-width: 2.5px;
+  border-color: rgb(167 139 250 / 38%);
+  box-shadow: 0 0 68px rgb(139 92 246 / 17%), inset 0 0 54px rgb(56 189 248 / 9%);
   animation: fixed-orbit-wide 110s linear infinite;
 }
 
 .fixed-orbit-background__ring--tall {
-  width: min(85vw, 72rem);
-  height: min(106vh, 74rem);
+  width: min(154vw, 134rem);
+  height: min(166vh, 125rem);
+  border-width: 2.25px;
   border-style: dashed;
   border-color: rgb(56 189 248 / 23%);
-  box-shadow: 0 0 34px rgb(56 189 248 / 7%);
+  box-shadow: 0 0 50px rgb(56 189 248 / 13%), 0 0 38px rgb(139 92 246 / 9%), inset 0 0 32px rgb(139 92 246 / 7%);
   animation: fixed-orbit-tall 140s linear infinite;
 }
 
 .fixed-orbit-background__ring--inner {
-  width: min(72vw, 58rem);
-  height: min(78vh, 56rem);
+  width: min(106vw, 86rem);
+  height: min(115vh, 86rem);
+  border-width: 2px;
   border-style: dotted;
   border-color: rgb(167 139 250 / 20%);
-  box-shadow: inset 0 0 32px rgb(56 189 248 / 5%);
+  box-shadow: 0 0 42px rgb(139 92 246 / 12%), inset 0 0 40px rgb(56 189 248 / 8%);
   animation: fixed-orbit-inner 82s linear infinite;
 }
 
 .fixed-orbit-background__ring--outer {
-  width: min(136vw, 110rem);
-  height: min(116vh, 90rem);
+  width: min(214vw, 178rem);
+  height: min(185vh, 144rem);
+  border-width: 2px;
   border-color: rgb(56 189 248 / 11%);
   border-style: dotted;
-  box-shadow: 0 0 58px rgb(56 189 248 / 5%);
+  box-shadow: 0 0 78px rgb(56 189 248 / 11%), 0 0 54px rgb(139 92 246 / 8%), inset 0 0 38px rgb(139 92 246 / 6%);
   animation: fixed-orbit-outer 176s linear infinite;
 }
 
 .fixed-orbit-background__ring--cross {
-  width: min(96vw, 82rem);
-  height: min(60vh, 48rem);
+  width: min(158vw, 134rem);
+  height: min(101vh, 82rem);
+  border-width: 2.5px;
   border-color: rgb(167 139 250 / 14%);
   border-style: double;
   animation: fixed-orbit-cross 118s linear infinite;
+}
+
+.fixed-orbit-background__ring--grand {
+  width: min(320vw, 260rem);
+  height: min(350vh, 260rem);
+  border-width: 3px;
+  border-color: rgb(196 181 253 / 38%);
+  box-shadow: 0 0 48px rgb(196 181 253 / 20%), 0 0 96px rgb(139 92 246 / 12%), inset 0 0 42px rgb(139 92 246 / 8%);
+  animation: fixed-orbit-grand 154s linear infinite;
 }
 
 @keyframes fixed-orbit-wide {
@@ -221,6 +235,11 @@ a {
 @keyframes fixed-orbit-cross {
   from { transform: translate(-50%, -50%) perspective(1000px) rotateX(34deg) rotateY(28deg) rotateZ(0deg); }
   to { transform: translate(-50%, -50%) perspective(1000px) rotateX(34deg) rotateY(28deg) rotateZ(-360deg); }
+}
+
+@keyframes fixed-orbit-grand {
+  from { transform: translate(-50%, -50%) perspective(1000px) rotateX(62deg) rotateY(-12deg) rotateZ(0deg); }
+  to { transform: translate(-50%, -50%) perspective(1000px) rotateX(62deg) rotateY(-12deg) rotateZ(-360deg); }
 }
 
 .fixed-orbit-background__energy-wave {
@@ -405,11 +424,11 @@ a {
 
 @media (max-width: 640px) {
   .fixed-orbit-background { opacity: 0.54; }
-  .fixed-orbit-background__ring--wide { width: 135vw; height: 70vh; }
-  .fixed-orbit-background__ring--tall { width: 95vw; height: 92vh; }
-  .fixed-orbit-background__ring--inner { width: 82vw; height: 66vh; }
-  .fixed-orbit-background__ring--outer { width: 150vw; height: 112vh; }
-  .fixed-orbit-background__ring--cross { width: 110vw; height: 58vh; }
+  .fixed-orbit-background__ring--wide { width: 202vw; height: 127vh; }
+  .fixed-orbit-background__ring--tall { width: 163vw; height: 158vh; }
+  .fixed-orbit-background__ring--inner { width: 118vw; height: 115vh; }
+  .fixed-orbit-background__ring--outer { width: 228vw; height: 178vh; }
+  .fixed-orbit-background__ring--cross { width: 190vw; height: 98vh; }
   .fixed-orbit-background__energy-wave { opacity: .28; }
   .fixed-orbit-background__energy-wave--two { opacity: .2; }
   .fixed-orbit-background__wire--one { left: 5%; top: 22%; }
@@ -423,7 +442,8 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .fixed-orbit-background__ring--wide,
   .fixed-orbit-background__ring--tall,
-  .fixed-orbit-background__ring--inner { animation: none; }
+  .fixed-orbit-background__ring--inner,
+  .fixed-orbit-background__ring--grand { animation: none; }
   .fixed-orbit-background__ring--wide { transform: translate(-50%, -50%) perspective(1000px) rotateX(66deg); }
   .fixed-orbit-background__ring--tall { transform: translate(-50%, -50%) perspective(1000px) rotateX(57deg) rotateY(16deg); }
   .fixed-orbit-background__ring--inner { transform: translate(-50%, -50%) perspective(1000px) rotateX(75deg) rotateY(-24deg); }
@@ -495,6 +515,19 @@ a {
   backdrop-filter: blur(2px);
 }
 
+.hero-name-heading {
+  animation: hero-name-glow 7s ease-in-out infinite alternate;
+}
+
+.hero-name-letter {
+  text-shadow: 0 0 22px rgb(167 139 250 / 14%);
+}
+
+@keyframes hero-name-glow {
+  from { filter: drop-shadow(0 0 0 rgb(139 92 246 / 0%)); }
+  to { filter: drop-shadow(0 0 12px rgb(139 92 246 / 16%)); }
+}
+
 .hero-glass-cube {
   transform-style: preserve-3d;
 }
@@ -529,25 +562,31 @@ a {
 
 .profile-orbit-frame::before {
   position: absolute;
-  z-index: -1;
-  inset: -8%;
+  z-index: 0;
+  inset: -140%;
   border-radius: inherit;
   background: conic-gradient(from 120deg, transparent 12%, rgb(139 92 246 / 65%), rgb(56 189 248 / 58%), transparent 78%);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 24px), #000 calc(100% - 12px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 24px), #000 calc(100% - 12px));
   content: "";
-  filter: blur(22px);
-  opacity: 0.48;
+  filter: blur(28px);
+  opacity: 0.62;
   animation: profile-glow-turn 28s linear infinite;
   pointer-events: none;
 }
 
 .profile-orbit-frame::after {
   position: absolute;
-  z-index: -1;
-  inset: -8%;
-  border: 1px solid rgb(56 189 248 / 32%);
+  z-index: 1;
+  inset: -140%;
+  border: 2px solid rgb(196 181 253 / 56%);
   border-radius: 50%;
+  box-shadow:
+    0 0 22px rgb(167 139 250 / 48%),
+    0 0 64px rgb(139 92 246 / 24%),
+    inset 0 0 30px rgb(56 189 248 / 12%);
   content: "";
-  transform: perspective(700px) rotateX(68deg) rotateZ(-18deg);
+  transform: perspective(2200px) rotateX(68deg) rotateZ(-18deg);
   animation: profile-orbit-spin 32s linear infinite;
   pointer-events: none;
 }
@@ -556,13 +595,18 @@ a {
   box-shadow: 0 28px 88px rgb(0 0 0 / 48%), 0 0 54px rgb(56 189 248 / 20%), 0 0 42px rgb(139 92 246 / 22%);
 }
 
+@media (max-width: 640px) {
+  .profile-orbit-frame::before,
+  .profile-orbit-frame::after { inset: -125%; }
+}
+
 @keyframes profile-glow-turn {
   to { transform: rotate(360deg); }
 }
 
 @keyframes profile-orbit-spin {
-  from { transform: perspective(700px) rotateX(68deg) rotateZ(-18deg); }
-  to { transform: perspective(700px) rotateX(68deg) rotateZ(342deg); }
+  from { transform: perspective(2200px) rotateX(68deg) rotateZ(-18deg); }
+  to { transform: perspective(2200px) rotateX(68deg) rotateZ(342deg); }
 }
 
 .terminal-caret {
@@ -971,4 +1015,239 @@ a {
   .hero-orbit-particle {
     animation: none;
   }
+}
+
+/* Additive ambient layer. Kept separate from the fixed scene above. */
+.ambient-augmentation-layer {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  contain: layout paint;
+  pointer-events: none;
+}
+
+.ambient-augmentation-atmosphere {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 17% 23%, rgb(167 139 250 / 13%), transparent 32rem),
+    radial-gradient(ellipse at 82% 37%, rgb(139 92 246 / 10%), transparent 38rem),
+    radial-gradient(ellipse at 53% 81%, rgb(196 181 253 / 6%), transparent 42rem),
+    linear-gradient(135deg, rgb(13 10 24 / 27%), transparent 43%, rgb(12 9 22 / 22%));
+  opacity: .72;
+  mix-blend-mode: screen;
+}
+
+.ambient-augmentation-light {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  opacity: .72;
+  mix-blend-mode: screen;
+}
+
+.ambient-augmentation-energy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px rgb(139 92 246 / 22%));
+  opacity: .55;
+}
+
+.ambient-augmentation-trail {
+  stroke-dasharray: 22 40;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
+}
+
+.ambient-augmentation-trail--second {
+  opacity: .66;
+  stroke-dasharray: 14 46;
+}
+
+.ambient-augmentation-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgb(139 92 246 / 15%);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgb(139 92 246 / 5%), inset 0 0 20px rgb(56 189 248 / 3%);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ambient-augmentation-orbit--blue {
+  border-color: rgb(56 189 248 / 16%);
+  border-style: dashed;
+  box-shadow: 0 0 20px rgb(56 189 248 / 6%);
+}
+
+.ambient-augmentation-orbit--purple { border-color: rgb(139 92 246 / 18%); }
+
+.ambient-augmentation-particle {
+  position: absolute;
+  width: .48rem;
+  height: .48rem;
+  margin-left: -.24rem;
+  border: 1px solid rgb(255 255 255 / 68%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #fff, #38bdf8 42%, #8b5cf6 100%);
+  box-shadow: 0 0 9px 2px rgb(56 189 248 / 62%), 0 0 24px rgb(139 92 246 / 36%);
+}
+
+.ambient-augmentation-particle--small {
+  width: .3rem;
+  height: .3rem;
+  margin-left: -.15rem;
+  background: #c4b5fd;
+  box-shadow: 0 0 8px 2px rgb(139 92 246 / 78%), 0 0 18px rgb(56 189 248 / 32%);
+}
+
+.ambient-augmentation-wire {
+  position: absolute;
+  width: clamp(4.8rem, 8vw, 7.5rem);
+  overflow: visible;
+  color: rgb(167 139 250 / 54%);
+  filter: drop-shadow(0 0 9px rgb(139 92 246 / 28%));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ambient-augmentation-wire--one { top: 16%; left: 28%; }
+.ambient-augmentation-wire--two {
+  right: 17%;
+  bottom: 18%;
+  width: clamp(4rem, 6vw, 5.8rem);
+  color: rgb(56 189 248 / 58%);
+  filter: drop-shadow(0 0 10px rgb(56 189 248 / 30%));
+}
+
+.ambient-augmentation-accent {
+  position: absolute;
+  width: clamp(4.6rem, 7vw, 6.8rem);
+  color: rgb(196 181 253 / 48%);
+  filter: drop-shadow(0 0 8px rgb(139 92 246 / 27%));
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.ambient-augmentation-accent--one { top: 55%; left: 7%; }
+.ambient-augmentation-accent--two {
+  right: 27%;
+  bottom: 9%;
+  width: clamp(3.8rem, 5.5vw, 5.2rem);
+  color: rgb(167 139 250 / 42%);
+}
+
+.ambient-augmentation-hologram {
+  position: absolute;
+  top: 27%;
+  right: 10%;
+  display: grid;
+  width: clamp(4.8rem, 7.5vw, 7rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(56 189 248 / 25%);
+  border-radius: 1.1rem;
+  background: linear-gradient(145deg, rgb(56 189 248 / 7%), rgb(139 92 246 / 9%));
+  box-shadow: inset 0 0 24px rgb(56 189 248 / 8%), 0 0 28px rgb(139 92 246 / 10%);
+  backdrop-filter: blur(3px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ambient-augmentation-hologram-grid {
+  position: absolute;
+  inset: 12%;
+  border: 1px solid rgb(167 139 250 / 50%);
+  background-image: linear-gradient(rgb(56 189 248 / 20%) 1px, transparent 1px), linear-gradient(90deg, rgb(139 92 246 / 20%) 1px, transparent 1px);
+  background-size: 25% 25%;
+  transform: rotateX(58deg) rotateZ(12deg);
+  box-shadow: 0 0 16px rgb(56 189 248 / 16%);
+}
+
+.ambient-augmentation-hologram-core {
+  position: relative;
+  width: 28%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(255 255 255 / 62%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / 94%), rgb(56 189 248 / 65%) 24%, rgb(139 92 246 / 28%) 72%, transparent);
+  box-shadow: 0 0 18px 5px rgb(56 189 248 / 34%);
+}
+
+.ambient-augmentation-hologram-orbit {
+  position: absolute;
+  inset: 19% 6%;
+  border: 1px solid rgb(56 189 248 / 38%);
+  border-radius: 50%;
+  transform: rotateX(68deg) rotateZ(-24deg);
+  box-shadow: 0 0 12px rgb(56 189 248 / 22%);
+}
+
+.ambient-augmentation-glass-sphere {
+  position: absolute;
+  top: 62%;
+  left: 14%;
+  width: clamp(2.5rem, 4vw, 3.8rem);
+  aspect-ratio: 1;
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgb(255 255 255 / 64%), rgb(56 189 248 / 30%) 18%, rgb(139 92 246 / 23%) 58%, transparent 78%);
+  box-shadow: inset -5px -8px 14px rgb(8 9 15 / 38%), 0 0 24px rgb(56 189 248 / 25%);
+  backdrop-filter: blur(2px);
+  will-change: transform;
+}
+
+/* Enlarge only the compact inner orbit while keeping its center fixed. */
+.fixed-orbit-background__ring--inner {
+  scale: 12;
+  box-shadow: 0 0 56px rgb(167 139 250 / 19%), inset 0 0 40px rgb(139 92 246 / 10%);
+}
+
+.fixed-orbit-background__ring { scale: 1.25; }
+.fixed-orbit-background__ring--cross {
+  scale: 1.5;
+  border-width: 2px;
+  border-color: rgb(196 181 253 / 38%);
+  box-shadow: 0 0 42px rgb(139 92 246 / 20%), 0 0 82px rgb(56 189 248 / 10%), inset 0 0 34px rgb(56 189 248 / 9%);
+}
+.fixed-orbit-background__energy-wave { scale: 1.12; }
+.ambient-augmentation-orbit { scale: 1.4; }
+.ambient-augmentation-orbit {
+  border-width: 1.5px;
+  box-shadow: 0 0 34px rgb(139 92 246 / 11%), inset 0 0 30px rgb(56 189 248 / 6%);
+}
+.ambient-augmentation-orbit--compact {
+  scale: 6;
+  border-width: 3px;
+  border-color: rgb(196 181 253 / 38%);
+  box-shadow: 0 0 54px rgb(167 139 250 / 22%), 0 0 90px rgb(139 92 246 / 13%), inset 0 0 34px rgb(139 92 246 / 9%);
+}
+.ambient-augmentation-orbit--blue {
+  box-shadow: 0 0 38px rgb(56 189 248 / 12%), inset 0 0 22px rgb(139 92 246 / 6%);
+}
+
+@media (max-width: 640px) {
+  .ambient-augmentation-layer { opacity: .66; }
+  .ambient-augmentation-orbit:nth-of-type(5) { display: none; }
+  .ambient-augmentation-wire--one { top: 19%; left: 8%; }
+  .ambient-augmentation-wire--two { right: 7%; bottom: 16%; }
+  .ambient-augmentation-accent--one { top: 57%; left: 3%; }
+  .ambient-augmentation-accent--two { right: 7%; bottom: 10%; }
+  .ambient-augmentation-hologram { top: 20%; right: 7%; width: 4.4rem; }
+  .ambient-augmentation-glass-sphere { top: 69%; left: 8%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-name-heading { animation: none; }
+  .ambient-augmentation-orbit,
+  .ambient-augmentation-wire,
+  .ambient-augmentation-hologram,
+  .ambient-augmentation-glass-sphere { will-change: auto; }
 }

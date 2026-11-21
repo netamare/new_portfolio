@@ -51,12 +51,12 @@ export function Hero() {
     });
   const revealName = (value: string, delay: number, gradient = false) => {
     const letters = Array.from(value).map((letter, index) => (
-      <span key={`${letter}-${index}`} className="inline-block overflow-hidden align-bottom pb-[0.04em]">
+        <span key={`${letter}-${index}`} className="hero-name-letter inline-block overflow-hidden align-bottom pb-[0.04em]">
         <motion.span
           className="inline-block"
-          initial={shouldReduceMotion ? false : { y: "115%" }}
-          animate={{ y: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0 : 0.62, delay: shouldReduceMotion ? 0 : delay + index * 0.035, ease: [0.22, 1, 0.36, 1] }}
+            initial={shouldReduceMotion ? false : { y: "115%", opacity: 0, filter: "blur(6px)" }}
+            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.76, delay: shouldReduceMotion ? 0 : delay + index * 0.04, ease: [0.22, 1, 0.36, 1] }}
         >
           {letter}
         </motion.span>
@@ -90,7 +90,7 @@ export function Hero() {
       </div>
 
       <Container className="relative grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
-        <div className="relative z-10 min-w-0 max-w-3xl">
+        <div className="relative z-30 min-w-0 max-w-3xl">
           <motion.div {...enter(0.12)} className="mb-6 flex items-center gap-3">
             <span className="h-px w-8 bg-gradient-to-r from-purple to-blue" />
             <span className="font-mono text-xs font-semibold tracking-[0.25em] text-blue sm:text-sm">
@@ -100,7 +100,7 @@ export function Hero() {
 
           <h1
             id="hero-title"
-            className="mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
+            className="hero-name-heading mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
           >
             {revealName(portfolio.firstName, 0.22)}{" "}
             {revealName(portfolio.lastName, 0.3, true)}
@@ -211,7 +211,7 @@ export function Hero() {
               y: { duration: shouldReduceMotion ? 0 : 8, repeat: shouldReduceMotion ? 0 : Infinity, ease: "easeInOut" },
             }}
           >
-            <div className="relative size-full overflow-hidden rounded-full border border-white/15 bg-surface">
+            <div className="relative z-10 size-full overflow-hidden rounded-full border border-white/15 bg-surface">
               <motion.div
                 className="size-full"
                 animate={shouldReduceMotion ? undefined : { y: [0, -5, 0], scale: [1, 1.015, 1] }}
