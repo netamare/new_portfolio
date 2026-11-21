@@ -4,26 +4,30 @@ import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ContactForm } from "@/components/sections/contact-form";
 import { GithubMark, LinkedInMark } from "@/components/ui/social-icons";
+import { portfolio } from "@/data/portfolio";
+import { Code2 } from "lucide-react";
 
 const socialLinks = [
   {
     label: "GitHub",
     value: "github.com/netamare",
-    href: "https://github.com/netamare",
+    href: portfolio.socials.github.url,
     Icon: GithubMark,
   },
   {
     label: "LinkedIn",
     value: "linkedin.com/in/netsanet-amare-599a11381",
-    href: "https://www.linkedin.com/in/netsanet-amare-599a11381",
+    href: portfolio.socials.linkedin.url,
     Icon: LinkedInMark,
   },
   {
     label: "Email",
     value: "nestiamare64@gmail.com",
-    href: "mailto:nestiamare64@gmail.com",
+    href: `mailto:${portfolio.email}`,
     Icon: Mail,
   },
+  { label: "Codeforces", value: `@${portfolio.socials.codeforces.username}`, href: portfolio.socials.codeforces.url, Icon: Code2 },
+  { label: "LeetCode", value: `@${portfolio.socials.leetcode.username}`, href: portfolio.socials.leetcode.url, Icon: Code2 },
 ];
 
 export function ContactSection() {
@@ -67,7 +71,7 @@ export function ContactSection() {
                     <a
                       href={href}
                       target={label === "Email" ? undefined : "_blank"}
-                      rel={label === "Email" ? undefined : "noreferrer"}
+                      rel={label === "Email" ? undefined : "noopener noreferrer"}
                       aria-label={`${label}: ${value}`}
                       className="group flex items-center gap-3 rounded-xl border border-border/70 bg-background/45 p-3 transition-[transform,border-color,background-color] duration-200 hover:-translate-y-0.5 hover:border-purple/40 hover:bg-background/75"
                     >

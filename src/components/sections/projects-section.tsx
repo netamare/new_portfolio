@@ -1,57 +1,24 @@
 "use client";
 
 import { Activity, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { projects as portfolioProjects } from "@/data/portfolio";
 
-const projects = [
-  {
-    title: "WellFly – Flight Booking App",
-    description: "An Expedia-inspired flight booking application.",
-    technologies: ["Flutter", "Dart", "Flight API"],
-    overview: "An Expedia-inspired flight booking application.",
-    features: ["Flight booking experience"],
-    challenges: "Challenge details are not included in the available project information.",
-    contribution: "Contribution details are not included in the available project information.",
-    githubUrl: "",
-    liveUrl: "",
-    kind: "flight",
-    Icon: Plane,
-    accent: "text-blue",
-  },
-  {
-    title: "University Student Helper",
-    description:
-      "A student productivity app for schedules, GPA calculation, assignments, and notes.",
-    technologies: ["Flutter", "Dart", "Hive"],
-    overview: "A student productivity app for managing academic routines and coursework.",
-    features: ["Schedules", "GPA calculation", "Assignments", "Notes"],
-    challenges: "Challenge details are not included in the available project information.",
-    contribution: "Contribution details are not included in the available project information.",
-    githubUrl: "",
-    liveUrl: "",
-    kind: "student",
-    Icon: CalendarDays,
-    accent: "text-purple",
-  },
-  {
-    title: "Call Center 9141 – Response Monitoring System",
-    description:
-      "A web-based system for tracking citizen complaints, responses, and department performance.",
-    technologies: ["HTML", "CSS", "JavaScript"],
-    overview: "A web-based system for tracking citizen complaints, responses, and department performance.",
-    features: ["Complaint tracking", "Response monitoring", "Department performance tracking"],
-    challenges: "Challenge details are not included in the available project information.",
-    contribution: "Contribution details are not included in the available project information.",
-    githubUrl: "",
-    liveUrl: "",
-    kind: "monitoring",
-    Icon: Activity,
-    accent: "text-blue",
-  },
-] as const;
+const projectVisuals = {
+  flight: { Icon: Plane, accent: "text-blue" },
+  student: { Icon: CalendarDays, accent: "text-purple" },
+  monitoring: { Icon: Activity, accent: "text-blue" },
+} as const;
+
+
+const projects = portfolioProjects.map((project) => ({
+  ...project,
+  ...projectVisuals[project.kind],
+}));
 
 type ProjectKind = (typeof projects)[number]["kind"];
 
@@ -175,7 +142,36 @@ function ProjectVisual({ kind }: { kind: ProjectKind }) {
 
 export function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<ProjectKind | null>(null);
+  const trackRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const [horizontal, setHorizontal] = useState(false);
+  const [travel, setTravel] = useState(0);
+  const reduceMotion = useReducedMotion() ?? false;
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
+  const railX = useTransform(scrollYProgress, [0, 1], [0, -travel]);
   const selected = projects.find((project) => project.kind === selectedProject);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const updateLayout = () => {
+      setHorizontal(media.matches);
+      if (!viewportRef.current || !railRef.current || !media.matches) {
+        setTravel(0);
+        return;
+      }
+      setTravel(Math.max(0, railRef.current.scrollWidth - viewportRef.current.clientWidth));
+    };
+    const observer = new ResizeObserver(updateLayout);
+    if (viewportRef.current) observer.observe(viewportRef.current);
+    if (railRef.current) observer.observe(railRef.current);
+    updateLayout();
+    media.addEventListener("change", updateLayout);
+    return () => {
+      observer.disconnect();
+      media.removeEventListener("change", updateLayout);
+    };
+  }, []);
 
   useEffect(() => {
     if (!selected) return;
@@ -192,23 +188,29 @@ export function ProjectsSection() {
 
   return (
     <section
+      ref={trackRef}
       id="projects"
       aria-labelledby="projects-heading"
-      className="relative scroll-mt-20 py-24 sm:py-32"
+      className={`relative scroll-mt-20 ${horizontal && !reduceMotion ? "projects-scroll-track" : "py-24 sm:py-32"}`}
+      style={horizontal && !reduceMotion ? { height: `calc(100svh + ${travel}px)` } : undefined}
     >
-      <Container className="relative">
-        <AnimatedReveal>
+      <div className={horizontal && !reduceMotion ? "projects-sticky" : "relative"}>
+       <Container className="relative w-full">
+        <div className={horizontal && !reduceMotion ? "projects-heading" : ""}>
+         <AnimatedReveal>
           <SectionHeading
             id="projects-heading"
             eyebrow="Selected work"
             title="Featured Projects"
             description="Some things I've been building."
           />
-        </AnimatedReveal>
+         </AnimatedReveal>
+        </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
+        <div ref={viewportRef} className={horizontal && !reduceMotion ? "projects-rail-viewport" : "mt-12"}>
+         <motion.div ref={railRef} style={horizontal && !reduceMotion ? { x: railX } : undefined} className={horizontal && !reduceMotion ? "projects-rail" : "grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7"}>
           {projects.map(({ title, description, technologies, kind, Icon, accent }, index) => (
-            <AnimatedReveal key={title} delay={0.08 + index * 0.1} className="h-full" tilt>
+            <AnimatedReveal key={title} delay={0.08 + index * 0.1} className={horizontal && !reduceMotion ? "project-rail-card" : "h-full"} tilt>
               <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-surface/65 shadow-[0_16px_50px_rgb(0_0_0_/_14%)] transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:border-purple/55 hover:shadow-[0_24px_65px_rgb(0_0_0_/_28%),0_0_38px_rgb(139_92_246_/_16%)]">
                 <ProjectVisual kind={kind} />
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -240,8 +242,11 @@ export function ProjectsSection() {
               </article>
             </AnimatedReveal>
           ))}
+         </motion.div>
         </div>
+        {horizontal && !reduceMotion ? <div className="projects-scroll-indicator" aria-hidden="true"><span>Keep scrolling</span><span className="projects-scroll-icon">↓</span></div> : null}
       </Container>
+      </div>
       {selected ? (
         <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-md sm:items-center sm:p-5" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedProject(null); }}>
           <section role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" className="max-h-[92dvh] w-full max-w-4xl overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0c0e18] shadow-[0_30px_100px_rgb(0_0_0_/_65%)] sm:rounded-3xl">
@@ -255,7 +260,7 @@ export function ProjectsSection() {
               <div className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0e19] [&>div]:h-64 [&>div]:border-b-0 sm:[&>div]:h-80">
                 <ProjectVisual kind={selected.kind} />
               </div>
-              <div className="grid gap-7 sm:grid-cols-2">
+                <div className="grid gap-7 sm:grid-cols-2">
                 <div>
                   <h3 className="mb-3 text-lg">Key features</h3>
                   <ul className="space-y-2 text-sm text-slate-300">{selected.features.map((feature) => <li key={feature} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-purple" />{feature}</li>)}</ul>
@@ -263,12 +268,6 @@ export function ProjectsSection() {
                 <div>
                   <h3 className="mb-3 text-lg">Technologies</h3>
                   <ul className="flex flex-wrap gap-2">{selected.technologies.map((technology) => <li key={technology} className="rounded-full border border-purple/20 bg-purple/[0.08] px-3 py-1.5 text-xs font-medium text-slate-200">{technology}</li>)}</ul>
-                </div>
-                <div>
-                  <h3 className="mb-2 text-lg">Challenges</h3><p className="mb-0 text-sm leading-6">{selected.challenges}</p>
-                </div>
-                <div>
-                  <h3 className="mb-2 text-lg">My contribution</h3><p className="mb-0 text-sm leading-6">{selected.contribution}</p>
                 </div>
               </div>
               {(selected.githubUrl || selected.liveUrl) ? <div className="mt-8 flex flex-wrap gap-3">{selected.githubUrl ? <a href={selected.githubUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-semibold hover:border-purple/60"><CodeXml size={16} /> GitHub</a> : null}{selected.liveUrl ? <a href={selected.liveUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-5 text-sm font-semibold text-white"><ExternalLink size={16} /> Live demo</a> : null}</div> : null}

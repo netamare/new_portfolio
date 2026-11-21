@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { portfolio } from "@/data/portfolio";
 
 type FieldName = "fullName" | "email" | "subject" | "message";
 type FormErrors = Partial<Record<FieldName, string>>;
@@ -44,7 +45,7 @@ export function ContactForm() {
       return;
     }
 
-    const mailto = new URL("mailto:nestiamare64@gmail.com");
+    const mailto = new URL(`mailto:${portfolio.email}`);
     mailto.searchParams.set("subject", values.subject);
     mailto.searchParams.set(
       "body",

@@ -1,15 +1,16 @@
 import { Mail, MoveUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { GithubMark, LinkedInMark } from "@/components/ui/social-icons";
+import { portfolio } from "@/data/portfolio";
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/netamare", Icon: GithubMark },
+  { label: "GitHub", href: portfolio.socials.github.url, Icon: GithubMark },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/netsanet-amare-599a11381",
+    href: portfolio.socials.linkedin.url,
     Icon: LinkedInMark,
   },
-  { label: "Email", href: "mailto:nestiamare64@gmail.com", Icon: Mail },
+  { label: "Email", href: `mailto:${portfolio.email}`, Icon: Mail },
 ];
 
 export function Footer() {

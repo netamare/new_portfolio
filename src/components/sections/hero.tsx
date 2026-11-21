@@ -8,26 +8,34 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { type PointerEvent as ReactPointerEvent } from "react";
+import { useRef } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { GradientText } from "@/components/ui/gradient-text";
+import { portfolio } from "@/data/portfolio";
+import { cvFileName, cvFilePath } from "@/data/cv";
+import { LiveCodeTerminal } from "@/components/sections/live-code-terminal";
+import { CodeforcesMark, LeetCodeMark } from "@/components/ui/coding-platform-icons";
 
 export function Hero() {
-  const shouldReduceMotion = useReducedMotion() ?? false;
   const heroRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroParallax = useTransform(scrollYProgress, [0, 1], [0, 16]);
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const springX = useSpring(pointerX, { stiffness: 170, damping: 22, mass: 0.65 });
   const springY = useSpring(pointerY, { stiffness: 170, damping: 22, mass: 0.65 });
   const rotateX = useTransform(springY, [-1, 1], [7, -7]);
   const rotateY = useTransform(springX, [-1, 1], [-8, 8]);
+  const wideOrbitTiltX = useTransform(springY, [-1, 1], [75, 61]);
+  const tallOrbitTiltX = useTransform(springY, [-1, 1], [77, 63]);
+  const innerOrbitTiltX = useTransform(springY, [-1, 1], [33, 19]);
   const glowX = useTransform(springX, [-1, 1], [-14, 14]);
   const glowY = useTransform(springY, [-1, 1], [-12, 12]);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const scrollY = useTransform(scrollYProgress, [0, 1], [0, 24]);
   const handlePhotoPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (shouldReduceMotion || event.pointerType !== "mouse") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -51,6 +59,26 @@ export function Hero() {
         ease: [0.22, 1, 0.36, 1] as const,
       },
     });
+  const revealName = (value: string, delay: number, gradient = false) => {
+    const letters = Array.from(value).map((letter, index) => (
+      <span key={`${letter}-${index}`} className="inline-block overflow-hidden align-bottom pb-[0.04em]">
+        <motion.span
+          className="inline-block"
+          initial={shouldReduceMotion ? false : { y: "115%" }}
+          animate={{ y: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.62, delay: shouldReduceMotion ? 0 : delay + index * 0.035, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {letter}
+        </motion.span>
+      </span>
+    ));
+
+    return (
+      <motion.span {...enter(delay)} className="inline-block">
+        {gradient ? <GradientText>{letters}</GradientText> : letters}
+      </motion.span>
+    );
+  };
 
   return (
     <section
@@ -62,18 +90,18 @@ export function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           className="absolute -left-40 top-[15%] size-72 rounded-full bg-purple/10 blur-[110px] sm:size-[28rem]"
-          animate={shouldReduceMotion ? undefined : { x: [0, 34, 0], y: [0, -20, 0] }}
+          animate={shouldReduceMotion ? undefined : { x: [0, 34, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute -right-40 bottom-[5%] size-80 rounded-full bg-blue/10 blur-[120px] sm:size-[32rem]"
-          animate={shouldReduceMotion ? undefined : { x: [0, -25, 0], y: [0, 24, 0] }}
+          animate={shouldReduceMotion ? undefined : { x: [0, -25, 0] }}
           transition={{ duration: 17, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
-      <Container className="relative grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
-        <div className="relative z-10 max-w-3xl">
+      <Container className="relative grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+        <div className="relative z-10 min-w-0 max-w-3xl">
           <motion.div {...enter(0.12)} className="mb-6 flex items-center gap-3">
             <span className="h-px w-8 bg-gradient-to-r from-purple to-blue" />
             <span className="font-mono text-xs font-semibold tracking-[0.25em] text-blue sm:text-sm">
@@ -85,33 +113,83 @@ export function Hero() {
             id="hero-title"
             className="mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
           >
-            <motion.span {...enter(0.22)} className="inline-block">Netsanet</motion.span>{" "}
-            <motion.span {...enter(0.3)} className="inline-block"><GradientText>Amare</GradientText></motion.span>
+            {revealName(portfolio.firstName, 0.22)}{" "}
+            {revealName(portfolio.lastName, 0.3, true)}
           </h1>
 
           <motion.p
             {...enter(0.34)}
             className="mb-5 max-w-2xl text-lg font-medium leading-8 text-slate-200 sm:text-xl sm:leading-9"
           >
-            Computer Science Student <span className="text-purple">|</span> Developer{" "}
-            <span className="text-purple">|</span> Creative Thinker
+            {portfolio.role}
           </motion.p>
 
           <motion.p
             {...enter(0.44)}
-            className="mb-8 max-w-xl text-base leading-7 sm:text-lg sm:leading-8"
+            className="mb-6 max-w-xl text-base leading-7 sm:text-lg sm:leading-8"
           >
-            I enjoy building digital experiences, solving problems, and turning ideas into
-            functional applications. I&apos;m currently exploring mobile and web development.
+            {portfolio.intro}
           </motion.p>
 
-          <motion.div {...enter(0.54)} className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <motion.div {...enter(0.5)} className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <motion.a
+              href={portfolio.socials.leetcode.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LeetCode profile, opens in a new tab"
+              className="group relative inline-flex min-h-[4.25rem] w-full items-center gap-3 overflow-hidden rounded-2xl border border-purple/30 bg-surface/75 px-4 py-3 shadow-[0_12px_34px_rgb(0_0_0_/_18%)] backdrop-blur-md transition-[border-color,box-shadow,background-color] duration-300 hover:border-purple/65 hover:bg-surface hover:shadow-[0_16px_42px_rgb(139_92_246_/_18%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue sm:w-[14rem]"
+              style={{ transformPerspective: 700 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02, rotateX: 1.8, rotateY: -1.2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 320, damping: 22 }}
+            >
+              <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-purple/10 via-transparent to-blue/10 opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="relative flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                <LeetCodeMark className="size-7" />
+              </span>
+              <span className="relative min-w-0 flex-1 text-left">
+                <span className="block text-sm font-semibold leading-5 text-foreground">LeetCode</span>
+                <span className="block truncate font-mono text-[11px] leading-5 text-secondary">@{portfolio.socials.leetcode.username}</span>
+              </span>
+              <ArrowUpRight className="relative size-4 shrink-0 text-blue transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+            </motion.a>
+            <motion.a
+              href={portfolio.socials.codeforces.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Codeforces profile, opens in a new tab"
+              className="group relative inline-flex min-h-[4.25rem] w-full items-center gap-3 overflow-hidden rounded-2xl border border-blue/30 bg-surface/75 px-4 py-3 shadow-[0_12px_34px_rgb(0_0_0_/_18%)] backdrop-blur-md transition-[border-color,box-shadow,background-color] duration-300 hover:border-blue/65 hover:bg-surface hover:shadow-[0_16px_42px_rgb(56_189_248_/_16%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue sm:w-[14rem]"
+              style={{ transformPerspective: 700 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02, rotateX: 1.8, rotateY: 1.2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 320, damping: 22 }}
+            >
+              <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-blue/10 via-transparent to-purple/10 opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="relative flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                <CodeforcesMark className="size-7" />
+              </span>
+              <span className="relative min-w-0 flex-1 text-left">
+                <span className="block text-sm font-semibold leading-5 text-foreground">Codeforces</span>
+                <span className="block truncate font-mono text-[11px] leading-5 text-secondary">@{portfolio.socials.codeforces.username}</span>
+              </span>
+              <ArrowUpRight className="relative size-4 shrink-0 text-purple transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+            </motion.a>
+          </motion.div>
+
+          <motion.div {...enter(0.58)} className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <Button href="#projects" className="w-full sm:w-auto">
               Explore My Work <ArrowRight size={17} aria-hidden="true" />
             </Button>
             <Button href="#contact" variant="secondary" className="w-full sm:w-auto">
               Let&apos;s Connect <ArrowRight size={17} aria-hidden="true" />
             </Button>
+            <a
+              href={cvFilePath}
+              download={cvFileName}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-blue/30 bg-blue/10 px-5 py-2.5 text-sm font-semibold text-foreground shadow-[0_0_24px_rgb(56_189_248_/_8%)] transition-[transform,border-color,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-blue/60 hover:bg-blue/15 hover:shadow-[0_0_30px_rgb(56_189_248_/_18%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue sm:w-auto"
+            >
+              <ArrowDown size={16} aria-hidden="true" /> Download CV
+            </a>
           </motion.div>
 
           <motion.div {...enter(0.64)} className="inline-flex items-center gap-2.5 rounded-full border border-border/80 bg-surface/65 px-3.5 py-2 backdrop-blur-md">
@@ -120,12 +198,35 @@ export function Hero() {
               <span className="relative inline-flex size-2.5 rounded-full bg-emerald-400" />
             </span>
             <span className="text-xs font-medium tracking-wide text-slate-300 sm:text-sm">
-              Available for opportunities
+              Computer Science student at Arsi University
             </span>
           </motion.div>
         </div>
 
-        <div className="relative mx-auto flex min-h-[24rem] w-full max-w-[28rem] items-center justify-center sm:min-h-[30rem] lg:min-h-0 lg:max-w-none">
+        <div className="relative mx-auto flex min-w-0 w-full max-w-[28rem] flex-col items-center justify-center lg:max-w-none">
+        <motion.div style={shouldReduceMotion ? undefined : { y: heroParallax }} className="relative flex h-[min(88vw,30rem)] w-full items-center justify-center sm:h-[31rem] lg:h-[31rem]">
+          <motion.div aria-hidden="true" className="hero-tech-field pointer-events-none absolute left-1/2 top-1/2 h-[148%] w-[148%] max-w-[44rem] -translate-x-1/2 -translate-y-1/2" style={{ rotateX, rotateY }}>
+            <motion.div className="hero-orbit-ring hero-orbit-ring--wide absolute left-1/2 top-1/2 h-[76%] w-[112%]" style={{ x: "-50%", y: "-50%", rotateX: wideOrbitTiltX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 42, repeat: Infinity, ease: "linear" }} />
+            <motion.div className="hero-orbit-ring hero-orbit-ring--tilted absolute left-1/2 top-1/2 h-[108%] w-[88%]" style={{ x: "-50%", y: "-50%", rotateX: tallOrbitTiltX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: -360 }} transition={{ duration: 54, repeat: Infinity, ease: "linear" }} />
+            <motion.div className="hero-orbit-ring hero-orbit-ring--inner absolute left-1/2 top-1/2 h-[92%] w-[108%]" style={{ x: "-50%", y: "-50%", rotateX: innerOrbitTiltX, rotateY: -18 }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 32, repeat: Infinity, ease: "linear" }} />
+            <motion.svg className="hero-wireframe absolute left-[2%] top-[11%] w-[5.5rem] sm:w-[7rem]" viewBox="0 0 120 120" fill="none" stroke="url(#orbit-wire-gradient)" strokeWidth="1.3" style={{ x: useTransform(springX, [-1, 1], [-12, 12]), y: useTransform(springY, [-1, 1], [10, -10]), rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { rotate: [0, 360] }} transition={{ duration: 36, repeat: Infinity, ease: "linear" }}>
+              <defs><linearGradient id="orbit-wire-gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stopColor="#8b5cf6" stopOpacity=".9" /><stop offset="1" stopColor="#38bdf8" stopOpacity=".8" /></linearGradient></defs>
+              <path d="M60 5 108 34 100 90 60 115 20 90 12 34 60 5Z" /><path d="m12 34 48 19 48-19M20 90l40-37 40 37M60 5v48m0 62V53M12 34l8 56m88-56-8 56" />
+            </motion.svg>
+            <span className="hero-orbit-particle hero-orbit-particle--one absolute left-[9%] top-[24%]" />
+            <span className="hero-orbit-particle hero-orbit-particle--two absolute right-[8%] top-[33%]" />
+            <span className="hero-orbit-particle hero-orbit-particle--three absolute bottom-[17%] left-[24%]" />
+            <span className="hero-orbit-particle hero-orbit-particle--four absolute bottom-[23%] right-[17%]" />
+            <motion.div className="hero-glass-orbit absolute left-[4%] top-[17%] size-20 rounded-full border border-blue/25" style={{ rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}>
+              <span className="absolute inset-2 rounded-full border border-purple/35 [transform:rotateX(68deg)]" />
+              <span className="absolute inset-0 rounded-full bg-blue/10 blur-lg" />
+            </motion.div>
+            <motion.div className="hero-glass-cube absolute right-[3%] top-[25%] size-14 [--cube-depth:1.75rem] sm:size-[4.5rem] sm:[--cube-depth:2.25rem]" style={{ rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { y: [0, -12, 0], rotateZ: [0, 8, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}>
+              <span className="cube-face cube-front" /><span className="cube-face cube-back" /><span className="cube-face cube-left" /><span className="cube-face cube-right" /><span className="cube-face cube-top" /><span className="cube-face cube-bottom" />
+            </motion.div>
+            <motion.div className="hero-glass-orb absolute bottom-[15%] right-[7%] size-10 rounded-full sm:size-14" style={{ x: useTransform(springX, [-1, 1], [-18, 18]), y: useTransform(springY, [-1, 1], [12, -12]) }} animate={shouldReduceMotion ? undefined : { scale: [0.9, 1.08, 0.9] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+            <motion.span className="absolute bottom-[27%] left-[4%] rounded-full border border-white/10 bg-surface/55 px-3 py-1 font-mono text-[9px] text-blue shadow-lg backdrop-blur-md sm:text-[10px]" style={{ x: useTransform(springX, [-1, 1], [9, -9]), y: useTransform(springY, [-1, 1], [7, -7]) }} animate={shouldReduceMotion ? undefined : { y: [0, -5, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>Flutter / Dart</motion.span>
+          </motion.div>
           <motion.div
             aria-hidden="true"
             className="absolute h-[68%] w-[72%] rounded-full bg-gradient-to-br from-purple/35 via-purple/15 to-blue/30 blur-[4rem]"
@@ -134,39 +235,42 @@ export function Hero() {
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
-            className="relative z-10 w-[min(72%,22rem)] overflow-hidden rounded-[2rem] border border-white/15 bg-surface/70 shadow-[0_24px_80px_rgb(0_0_0_/_45%),0_0_50px_rgb(139_92_246_/_18%)] [transform-style:preserve-3d]"
+            className="profile-orbit-frame relative z-20 aspect-square w-[min(86%,24rem)] rounded-full p-[3px] [transform-style:preserve-3d]"
             initial={false}
             onPointerMove={handlePhotoPointerMove}
             onPointerLeave={resetPhotoPointer}
             animate={{
               opacity: shouldReduceMotion ? 1 : [0.88, 1],
-              clipPath: shouldReduceMotion
-                ? "inset(0 0 0% 0 round 2rem)"
-                : ["inset(0 0 9% 0 round 2rem)", "inset(0 0 0% 0 round 2rem)"],
+              y: shouldReduceMotion ? 0 : [0, -8, 0, 7, 0],
             }}
-            style={shouldReduceMotion ? undefined : { rotateX, rotateY, y: scrollY }}
+            style={shouldReduceMotion ? undefined : { rotateX, rotateY }}
             transition={{
               duration: shouldReduceMotion ? 0 : 0.8,
               delay: shouldReduceMotion ? 0 : 0.5,
               ease: [0.22, 1, 0.36, 1],
+              y: { duration: shouldReduceMotion ? 0 : 8, repeat: shouldReduceMotion ? 0 : Infinity, ease: "easeInOut" },
             }}
           >
-            <motion.div
-              className="aspect-[956/1320]"
-              animate={shouldReduceMotion ? undefined : { y: [0, -6, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Image
-                src="/images/net.jpg"
-                alt="Netsanet Amare"
-                width={956}
-                height={1320}
-                quality={100}
-                unoptimized
-                className="h-full w-full object-contain"
-              />
-            </motion.div>
+            <div className="relative size-full overflow-hidden rounded-full border border-white/15 bg-surface">
+              <motion.div
+                className="size-full"
+                animate={shouldReduceMotion ? undefined : { y: [0, -5, 0], scale: [1, 1.015, 1] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Image
+                  src={portfolio.photo}
+                  alt={portfolio.name}
+                  width={956}
+                  height={1320}
+                  priority
+                  sizes="(max-width: 1024px) 78vw, 384px"
+                  className="h-full w-full object-cover object-top"
+                />
+              </motion.div>
+            </div>
           </motion.div>
+         </motion.div>
+          <LiveCodeTerminal />
         </div>
       </Container>
 

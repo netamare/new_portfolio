@@ -118,6 +118,165 @@ a {
   color: inherit;
 }
 
+.particle-universe {
+  opacity: 0.78;
+  contain: strict;
+}
+
+.hero-tech-field {
+  perspective: 900px;
+  transform-style: preserve-3d;
+  overflow: visible;
+  will-change: transform;
+}
+
+.hero-wireframe {
+  filter: drop-shadow(0 0 12px rgb(56 189 248 / 28%));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-orbit-ring {
+  z-index: 0;
+  border: 1px solid rgb(56 189 248 / 34%);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgb(56 189 248 / 8%), inset 0 0 22px rgb(139 92 246 / 8%);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-orbit-ring--wide {
+  border-color: rgb(139 92 246 / 44%);
+  box-shadow: 0 0 22px rgb(139 92 246 / 10%);
+  transform: rotateX(68deg);
+}
+
+.hero-orbit-ring--tilted {
+  border-style: dashed;
+  border-color: rgb(56 189 248 / 27%);
+  box-shadow: 0 0 26px rgb(56 189 248 / 8%);
+}
+
+.hero-orbit-ring--inner {
+  border-color: rgb(167 139 250 / 27%);
+  border-style: dotted;
+  box-shadow: inset 0 0 22px rgb(56 189 248 / 6%);
+}
+
+.hero-orbit-particle {
+  z-index: 1;
+  width: 0.52rem;
+  height: 0.52rem;
+  border: 1px solid rgb(255 255 255 / 70%);
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  box-shadow: 0 0 14px rgb(56 189 248 / 72%), 0 0 28px rgb(139 92 246 / 34%);
+  animation: orbit-particle-drift 6s ease-in-out infinite;
+}
+
+.hero-orbit-particle--two { animation-delay: -1.4s; }
+.hero-orbit-particle--three { animation-delay: -2.8s; }
+.hero-orbit-particle--four { animation-delay: -4.2s; }
+
+@keyframes orbit-particle-drift {
+  0%, 100% { transform: translate3d(0, 0, 20px) scale(0.82); opacity: 0.58; }
+  50% { transform: translate3d(7px, -11px, 36px) scale(1.18); opacity: 1; }
+}
+
+.hero-glass-orbit {
+  box-shadow: inset 0 0 25px rgb(56 189 248 / 8%), 0 0 34px rgb(139 92 246 / 14%);
+  transform-style: preserve-3d;
+  backdrop-filter: blur(2px);
+}
+
+.hero-glass-cube {
+  transform-style: preserve-3d;
+}
+
+.cube-face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 22%);
+  background: linear-gradient(140deg, rgb(139 92 246 / 15%), rgb(56 189 248 / 5%));
+  box-shadow: inset 0 0 18px rgb(255 255 255 / 5%), 0 0 24px rgb(56 189 248 / 7%);
+  backdrop-filter: blur(5px);
+}
+
+.cube-front { transform: translateZ(var(--cube-depth)); }
+.cube-back { transform: rotateY(180deg) translateZ(var(--cube-depth)); }
+.cube-left { transform: rotateY(-90deg) translateZ(var(--cube-depth)); }
+.cube-right { transform: rotateY(90deg) translateZ(var(--cube-depth)); }
+.cube-top { transform: rotateX(90deg) translateZ(var(--cube-depth)); }
+.cube-bottom { transform: rotateX(-90deg) translateZ(var(--cube-depth)); }
+
+.hero-glass-orb {
+  background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 65%), rgb(56 189 248 / 28%) 22%, rgb(139 92 246 / 36%) 58%, rgb(139 92 246 / 4%) 76%);
+  box-shadow: inset -5px -8px 14px rgb(8 9 15 / 45%), 0 0 32px rgb(56 189 248 / 24%);
+}
+
+.profile-orbit-frame {
+  isolation: isolate;
+  background: conic-gradient(from 35deg, var(--purple), rgb(56 189 248 / 82%), rgb(255 255 255 / 35%), var(--blue), var(--purple));
+  box-shadow: 0 24px 80px rgb(0 0 0 / 42%), 0 0 38px rgb(139 92 246 / 18%);
+  transition: box-shadow 300ms ease;
+}
+
+.profile-orbit-frame::before {
+  position: absolute;
+  z-index: -1;
+  inset: -8%;
+  border-radius: inherit;
+  background: conic-gradient(from 120deg, transparent 12%, rgb(139 92 246 / 65%), rgb(56 189 248 / 58%), transparent 78%);
+  content: "";
+  filter: blur(22px);
+  opacity: 0.48;
+  animation: profile-glow-turn 28s linear infinite;
+  pointer-events: none;
+}
+
+.profile-orbit-frame::after {
+  position: absolute;
+  z-index: -1;
+  inset: -8%;
+  border: 1px solid rgb(56 189 248 / 32%);
+  border-radius: 50%;
+  content: "";
+  transform: perspective(700px) rotateX(68deg) rotateZ(-18deg);
+  animation: profile-orbit-spin 32s linear infinite;
+  pointer-events: none;
+}
+
+.profile-orbit-frame:hover {
+  box-shadow: 0 28px 88px rgb(0 0 0 / 48%), 0 0 54px rgb(56 189 248 / 20%), 0 0 42px rgb(139 92 246 / 22%);
+}
+
+@keyframes profile-glow-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes profile-orbit-spin {
+  from { transform: perspective(700px) rotateX(68deg) rotateZ(-18deg); }
+  to { transform: perspective(700px) rotateX(68deg) rotateZ(342deg); }
+}
+
+.terminal-caret {
+  display: inline-block;
+  margin-left: 1px;
+  color: var(--blue);
+  animation: terminal-blink 0.9s steps(2, start) infinite;
+}
+
+@keyframes terminal-blink {
+  to { visibility: hidden; }
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
 @keyframes gradient-shift {
   0%,
   100% {
@@ -136,25 +295,50 @@ a {
   animation: gradient-shift 12s ease-in-out infinite;
 }
 
-.ambient-mesh {
+.cinematic-aurora {
+  overflow: hidden;
+  contain: strict;
   background:
-    radial-gradient(ellipse at 18% 22%, rgb(139 92 246 / 9%), transparent 38%),
-    radial-gradient(ellipse at 82% 38%, rgb(56 189 248 / 7%), transparent 42%),
-    radial-gradient(ellipse at 48% 88%, rgb(139 92 246 / 5%), transparent 38%);
-  opacity: 0.7;
-  transform: scale(1.04);
-  will-change: transform;
-  animation: ambient-mesh-drift 32s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 15% 20%, rgb(139 92 246 / 11%), transparent 38%),
+    radial-gradient(ellipse at 86% 30%, rgb(56 189 248 / 9%), transparent 34%),
+    radial-gradient(ellipse at 55% 95%, rgb(139 92 246 / 7%), transparent 42%);
+  opacity: 0.82;
+  isolation: isolate;
 }
 
-@keyframes ambient-mesh-drift {
-  from {
-    transform: scale(1.04) translate3d(-0.5%, -0.5%, 0);
-  }
+.cinematic-aurora::before,
+.cinematic-aurora::after {
+  position: absolute;
+  inset: -20%;
+  content: "";
+  pointer-events: none;
+  will-change: transform, opacity;
+}
 
-  to {
-    transform: scale(1.08) translate3d(0.5%, 0.5%, 0);
-  }
+.cinematic-aurora::before {
+  background:
+    radial-gradient(ellipse at 28% 38%, rgb(139 92 246 / 17%), transparent 34%),
+    radial-gradient(ellipse at 72% 62%, rgb(56 189 248 / 12%), transparent 37%);
+  filter: blur(42px);
+  animation: aurora-flow 34s ease-in-out infinite alternate;
+}
+
+.cinematic-aurora::after {
+  background:
+    radial-gradient(ellipse at 74% 20%, rgb(139 92 246 / 9%), transparent 32%),
+    radial-gradient(ellipse at 25% 80%, rgb(56 189 248 / 8%), transparent 34%);
+  filter: blur(64px);
+  animation: aurora-flow-reverse 42s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-flow {
+  from { transform: translate3d(-2%, -1.5%, 0) rotate(-4deg) scale(1); opacity: 0.72; }
+  to { transform: translate3d(2.5%, 2%, 0) rotate(5deg) scale(1.08); opacity: 1; }
+}
+
+@keyframes aurora-flow-reverse {
+  from { transform: translate3d(2%, 1%, 0) rotate(4deg) scale(1.08); opacity: 0.7; }
+  to { transform: translate3d(-2%, -2%, 0) rotate(-5deg) scale(1); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
@@ -174,6 +358,239 @@ a {
   .main-nav-link:hover::after,
   .main-nav-link:focus-visible::after {
     transform: scaleX(1);
+  }
+}
+
+.intro-curtain {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgb(139 92 246 / 14%), transparent 38rem),
+    radial-gradient(ellipse at 25% 82%, rgb(56 189 248 / 5%), transparent 30rem),
+    var(--background);
+}
+
+.intro-curtain::before,
+.intro-curtain::after {
+  position: absolute;
+  z-index: 0;
+  width: min(52rem, 90vw);
+  aspect-ratio: 1;
+  border: 1px solid rgb(139 92 246 / 8%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  animation: intro-orbit 36s linear infinite;
+}
+
+.intro-curtain::before {
+  box-shadow: 0 0 90px rgb(139 92 246 / 7%), inset 0 0 85px rgb(56 189 248 / 4%);
+}
+
+.intro-curtain::after {
+  width: min(42rem, 76vw);
+  border-color: rgb(56 189 248 / 7%);
+  animation-direction: reverse;
+  animation-duration: 48s;
+}
+
+@keyframes intro-orbit {
+  from { transform: rotate(0deg) scale(0.98); }
+  to { transform: rotate(360deg) scale(1.02); }
+}
+
+.intro-wordmark {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.intro-welcome-svg {
+  width: min(48rem, 92vw);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 28px rgb(139 92 246 / 20%));
+}
+
+.intro-handwritten {
+  fill: rgb(139 92 246 / 7%);
+  font-family: "Segoe Script", "Brush Script MT", "URW Chancery L", cursive;
+  font-size: 124px;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.intro-flourish {
+  filter: drop-shadow(0 0 8px rgb(56 189 248 / 45%));
+}
+
+.intro-caption {
+  margin-top: 0.6rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono-system);
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+}
+
+.intro-skip {
+  position: absolute;
+  z-index: 1;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgb(17 24 39 / 58%);
+  padding: 0.65rem 1rem;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.75rem;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.intro-skip:hover {
+  transform: translateY(-2px);
+  border-color: rgb(139 92 246 / 60%);
+  color: var(--foreground);
+}
+
+@media (max-width: 640px) {
+  .cinematic-aurora {
+    opacity: 0.65;
+  }
+
+  .cinematic-aurora::before,
+  .cinematic-aurora::after {
+    filter: blur(30px);
+  }
+
+  .intro-handwritten {
+    font-size: 132px;
+  }
+
+  .intro-caption {
+    font-size: 0.56rem;
+    letter-spacing: 0.2em;
+  }
+}
+
+.projects-scroll-track {
+  position: relative;
+  scroll-margin-top: 0;
+}
+
+.projects-sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100svh;
+  min-height: 600px;
+  align-items: center;
+  overflow: hidden;
+  padding: 5.5rem 0 3.5rem;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 28%, var(--background) 88%),
+    linear-gradient(rgb(255 255 255 / 1.2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 1.2%) 1px, transparent 1px),
+    var(--background);
+  background-size: 100% 100%, 64px 64px, 64px 64px, auto;
+}
+
+.projects-sticky > div {
+  width: 100%;
+}
+
+.projects-sticky .projects-heading {
+  flex: 0 0 auto;
+}
+
+.projects-sticky .projects-rail-viewport {
+  width: 100%;
+  overflow: hidden;
+  padding: 0 0.25rem;
+  mask-image: linear-gradient(90deg, transparent, #000 5% 95%, transparent);
+}
+
+.projects-rail {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  padding: 0.75rem 0.25rem;
+  will-change: transform;
+}
+
+.project-rail-card {
+  width: clamp(19rem, 31vw, 25rem);
+  height: min(28rem, calc(100svh - 17rem));
+  min-height: 24rem;
+  flex: 0 0 auto;
+}
+
+.project-rail-card article {
+  height: 100%;
+}
+
+.project-rail-card article > div:first-child {
+  flex: 0 0 12rem;
+}
+
+.projects-scroll-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding-top: 0.2rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono-system);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.projects-scroll-icon {
+  display: grid;
+  width: 1.35rem;
+  height: 1.7rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--blue);
+  animation: scroll-cue 1.5s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(3px); }
+}
+
+@media (max-height: 700px) and (min-width: 1024px) {
+  .projects-sticky {
+    min-height: 0;
+    padding-top: 4.6rem;
+    padding-bottom: 2.6rem;
+  }
+
+  .project-rail-card {
+    height: min(24rem, calc(100svh - 13rem));
+    min-height: 20rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .projects-sticky {
+    position: static;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding: 0;
+    background: none;
   }
 }
 
@@ -197,7 +614,34 @@ a {
     animation: none;
   }
 
-  .ambient-mesh {
+  .cinematic-aurora::before,
+  .cinematic-aurora::after,
+  .intro-curtain::before,
+  .intro-curtain::after {
+    animation: none;
+  }
+
+  .terminal-caret {
+    animation: none;
+  }
+
+  .intro-curtain {
+    display: none;
+  }
+
+  .projects-scroll-icon {
+    animation: none;
+  }
+
+  .profile-orbit-frame::before {
+    animation: none;
+  }
+
+  .profile-orbit-frame::after {
+    animation: none;
+  }
+
+  .hero-orbit-particle {
     animation: none;
   }
 }

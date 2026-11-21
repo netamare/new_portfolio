@@ -2,6 +2,7 @@ import { Lightbulb, RefreshCw, WandSparkles } from "lucide-react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { portfolio } from "@/data/portfolio";
 
 const highlights = [
   {
@@ -49,9 +50,7 @@ export function AboutSection() {
 
         <AnimatedReveal delay={0.08} className="mt-7 max-w-3xl">
           <p className="mb-0 text-lg leading-8 text-secondary sm:text-xl sm:leading-9">
-            I&apos;m Netsanet Amare, a Computer Science student at Arsi University interested in
-            mobile and web development. I enjoy building useful applications, solving problems,
-            learning new technologies, and creating clean user interfaces.
+            {portfolio.about}
           </p>
         </AnimatedReveal>
 

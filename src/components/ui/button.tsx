@@ -53,10 +53,10 @@ export function Button({ variant = "primary", className = "", ...props }: Action
     return (
       <motion.div
         className={wrapperClass}
-        style={reduceMotion ? undefined : { x, y }}
+        style={reduceMotion ? undefined : { x, y, transformPerspective: 700 }}
         onPointerMove={handlePointerMove}
         onPointerLeave={() => { pointerX.set(0); pointerY.set(0); }}
-        whileHover={reduceMotion ? undefined : { scale: 1.025 }}
+        whileHover={reduceMotion ? undefined : { scale: 1.025, rotateX: 1.5, rotateY: -1.5 }}
         whileTap={reduceMotion ? undefined : { scale: 0.97 }}
       >
         <Link className={classes} href={href} {...linkProps} />
@@ -67,10 +67,10 @@ export function Button({ variant = "primary", className = "", ...props }: Action
   return (
     <motion.div
       className={wrapperClass}
-      style={reduceMotion ? undefined : { x, y }}
+      style={reduceMotion ? undefined : { x, y, transformPerspective: 700 }}
       onPointerMove={handlePointerMove}
       onPointerLeave={() => { pointerX.set(0); pointerY.set(0); }}
-      whileHover={reduceMotion ? undefined : { scale: 1.025 }}
+      whileHover={reduceMotion ? undefined : { scale: 1.025, rotateX: 1.5, rotateY: -1.5 }}
       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
     >
       <button className={classes} {...(props as ButtonProps)} />

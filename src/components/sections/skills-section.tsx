@@ -5,6 +5,7 @@ import { Code2, Database, Palette, Smartphone, Wrench } from "lucide-react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { skillGroups as portfolioSkills } from "@/data/portfolio";
 
 const skillGroups = [
   { title: "Mobile", skills: ["Flutter", "Dart", "Kotlin"], Icon: Smartphone, color: "text-purple", glow: "group-hover:shadow-purple/10" },
@@ -12,7 +13,7 @@ const skillGroups = [
   { title: "Backend & Database", skills: ["Firebase", "MongoDB"], Icon: Database, color: "text-purple", glow: "group-hover:shadow-purple/10" },
   { title: "Tools", skills: ["Git", "GitHub", "VS Code", "Android Studio"], Icon: Wrench, color: "text-blue", glow: "group-hover:shadow-blue/10" },
   { title: "Creative", skills: ["UI/UX Design", "Video Editing"], Icon: Palette, color: "text-purple", glow: "group-hover:shadow-purple/10" },
-];
+].map((group, index) => ({ ...group, skills: portfolioSkills[index].skills }));
 
 const orbitPositions = [
   { x: 50, y: 5 },
