@@ -18,9 +18,10 @@ export default function Home() {
       >
         Skip to content
       </a>
-      <Navbar />
-      <IntroAnimation />
       <SiteEffects />
+      <IntroAnimation />
+      <div className="relative z-10">
+      <Navbar />
       <main id="main-content">
         <Hero />
         <AboutSection />
@@ -30,6 +31,7 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer />
+      </div>
     </>
   );
 }

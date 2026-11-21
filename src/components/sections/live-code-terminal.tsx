@@ -16,7 +16,7 @@ export function LiveCodeTerminal() {
   const [visibleCharacters, setVisibleCharacters] = useState(0);
   const example = examples[exampleIndex];
   const source = example.lines.join("\n");
-  const visibleCode = reduceMotion ? source : source.slice(0, visibleCharacters);
+  const visibleCode = source.slice(0, visibleCharacters);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 640px)");
@@ -67,7 +67,7 @@ export function LiveCodeTerminal() {
       </div>
       <div className="grid grid-cols-[1.5rem_1fr] gap-x-2 p-4 font-mono text-[10px] leading-[1.85] sm:text-[11px]">
         <span aria-hidden="true" className="select-none text-right text-slate-600">{visibleCode.split("\n").map((_, index) => index + 1).join("\n")}</span>
-        <pre aria-hidden="true" className="m-0 min-h-[5.2rem] whitespace-pre-wrap break-words text-slate-200"><code>{visibleCode}{!reduceMotion ? <span className="terminal-caret">▍</span> : null}</code></pre>
+        <pre aria-hidden="true" className="m-0 min-h-[5.2rem] whitespace-pre-wrap break-words text-slate-200"><code><span className="terminal-full-code">{source}</span><span className="terminal-animated-code">{visibleCode}</span><span className="terminal-caret">▍</span></code></pre>
       </div>
       <div className="flex items-center justify-between border-t border-white/[0.07] px-4 py-2">
         <span className="font-mono text-[9px] text-slate-500">Netsanet Amare</span>

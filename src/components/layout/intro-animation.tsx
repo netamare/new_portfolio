@@ -34,7 +34,7 @@ export function IntroAnimation() {
 
   return (
     <AnimatePresence>
-      {visible && !reduceMotion ? (
+      {visible ? (
         <motion.div
           className="intro-curtain"
           role="status"

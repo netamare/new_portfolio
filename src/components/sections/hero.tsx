@@ -4,12 +4,10 @@ import {
   motion,
   useMotionValue,
   useReducedMotion,
-  useScroll,
   useSpring,
   useTransform,
 } from "motion/react";
 import { type PointerEvent as ReactPointerEvent } from "react";
-import { useRef } from "react";
 import Image from "next/image";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,21 +19,13 @@ import { LiveCodeTerminal } from "@/components/sections/live-code-terminal";
 import { CodeforcesMark, LeetCodeMark } from "@/components/ui/coding-platform-icons";
 
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion() ?? false;
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroParallax = useTransform(scrollYProgress, [0, 1], [0, 16]);
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const springX = useSpring(pointerX, { stiffness: 170, damping: 22, mass: 0.65 });
   const springY = useSpring(pointerY, { stiffness: 170, damping: 22, mass: 0.65 });
   const rotateX = useTransform(springY, [-1, 1], [7, -7]);
   const rotateY = useTransform(springX, [-1, 1], [-8, 8]);
-  const wideOrbitTiltX = useTransform(springY, [-1, 1], [75, 61]);
-  const tallOrbitTiltX = useTransform(springY, [-1, 1], [77, 63]);
-  const innerOrbitTiltX = useTransform(springY, [-1, 1], [33, 19]);
-  const glowX = useTransform(springX, [-1, 1], [-14, 14]);
-  const glowY = useTransform(springY, [-1, 1], [-12, 12]);
   const handlePhotoPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (shouldReduceMotion || event.pointerType !== "mouse") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -82,7 +72,6 @@ export function Hero() {
 
   return (
     <section
-      ref={heroRef}
       id="home"
       aria-labelledby="hero-title"
       className="relative flex min-h-[100svh] scroll-mt-20 items-center overflow-hidden pb-16 pt-28 sm:pb-20 sm:pt-32"
@@ -204,36 +193,7 @@ export function Hero() {
         </div>
 
         <div className="relative mx-auto flex min-w-0 w-full max-w-[28rem] flex-col items-center justify-center lg:max-w-none">
-        <motion.div style={shouldReduceMotion ? undefined : { y: heroParallax }} className="relative flex h-[min(88vw,30rem)] w-full items-center justify-center sm:h-[31rem] lg:h-[31rem]">
-          <motion.div aria-hidden="true" className="hero-tech-field pointer-events-none absolute left-1/2 top-1/2 h-[148%] w-[148%] max-w-[44rem] -translate-x-1/2 -translate-y-1/2" style={{ rotateX, rotateY }}>
-            <motion.div className="hero-orbit-ring hero-orbit-ring--wide absolute left-1/2 top-1/2 h-[76%] w-[112%]" style={{ x: "-50%", y: "-50%", rotateX: wideOrbitTiltX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 42, repeat: Infinity, ease: "linear" }} />
-            <motion.div className="hero-orbit-ring hero-orbit-ring--tilted absolute left-1/2 top-1/2 h-[108%] w-[88%]" style={{ x: "-50%", y: "-50%", rotateX: tallOrbitTiltX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: -360 }} transition={{ duration: 54, repeat: Infinity, ease: "linear" }} />
-            <motion.div className="hero-orbit-ring hero-orbit-ring--inner absolute left-1/2 top-1/2 h-[92%] w-[108%]" style={{ x: "-50%", y: "-50%", rotateX: innerOrbitTiltX, rotateY: -18 }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 32, repeat: Infinity, ease: "linear" }} />
-            <motion.svg className="hero-wireframe absolute left-[2%] top-[11%] w-[5.5rem] sm:w-[7rem]" viewBox="0 0 120 120" fill="none" stroke="url(#orbit-wire-gradient)" strokeWidth="1.3" style={{ x: useTransform(springX, [-1, 1], [-12, 12]), y: useTransform(springY, [-1, 1], [10, -10]), rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { rotate: [0, 360] }} transition={{ duration: 36, repeat: Infinity, ease: "linear" }}>
-              <defs><linearGradient id="orbit-wire-gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stopColor="#8b5cf6" stopOpacity=".9" /><stop offset="1" stopColor="#38bdf8" stopOpacity=".8" /></linearGradient></defs>
-              <path d="M60 5 108 34 100 90 60 115 20 90 12 34 60 5Z" /><path d="m12 34 48 19 48-19M20 90l40-37 40 37M60 5v48m0 62V53M12 34l8 56m88-56-8 56" />
-            </motion.svg>
-            <span className="hero-orbit-particle hero-orbit-particle--one absolute left-[9%] top-[24%]" />
-            <span className="hero-orbit-particle hero-orbit-particle--two absolute right-[8%] top-[33%]" />
-            <span className="hero-orbit-particle hero-orbit-particle--three absolute bottom-[17%] left-[24%]" />
-            <span className="hero-orbit-particle hero-orbit-particle--four absolute bottom-[23%] right-[17%]" />
-            <motion.div className="hero-glass-orbit absolute left-[4%] top-[17%] size-20 rounded-full border border-blue/25" style={{ rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { rotateZ: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}>
-              <span className="absolute inset-2 rounded-full border border-purple/35 [transform:rotateX(68deg)]" />
-              <span className="absolute inset-0 rounded-full bg-blue/10 blur-lg" />
-            </motion.div>
-            <motion.div className="hero-glass-cube absolute right-[3%] top-[25%] size-14 [--cube-depth:1.75rem] sm:size-[4.5rem] sm:[--cube-depth:2.25rem]" style={{ rotateX, rotateY }} animate={shouldReduceMotion ? undefined : { y: [0, -12, 0], rotateZ: [0, 8, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}>
-              <span className="cube-face cube-front" /><span className="cube-face cube-back" /><span className="cube-face cube-left" /><span className="cube-face cube-right" /><span className="cube-face cube-top" /><span className="cube-face cube-bottom" />
-            </motion.div>
-            <motion.div className="hero-glass-orb absolute bottom-[15%] right-[7%] size-10 rounded-full sm:size-14" style={{ x: useTransform(springX, [-1, 1], [-18, 18]), y: useTransform(springY, [-1, 1], [12, -12]) }} animate={shouldReduceMotion ? undefined : { scale: [0.9, 1.08, 0.9] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
-            <motion.span className="absolute bottom-[27%] left-[4%] rounded-full border border-white/10 bg-surface/55 px-3 py-1 font-mono text-[9px] text-blue shadow-lg backdrop-blur-md sm:text-[10px]" style={{ x: useTransform(springX, [-1, 1], [9, -9]), y: useTransform(springY, [-1, 1], [7, -7]) }} animate={shouldReduceMotion ? undefined : { y: [0, -5, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>Flutter / Dart</motion.span>
-          </motion.div>
-          <motion.div
-            aria-hidden="true"
-            className="absolute h-[68%] w-[72%] rounded-full bg-gradient-to-br from-purple/35 via-purple/15 to-blue/30 blur-[4rem]"
-            animate={shouldReduceMotion ? undefined : { scale: [0.96, 1.04, 0.96], opacity: [0.65, 0.9, 0.65] }}
-            style={shouldReduceMotion ? undefined : { x: glowX, y: glowY }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <div className="relative flex h-[min(88vw,30rem)] w-full items-center justify-center sm:h-[31rem] lg:h-[31rem]">
           <motion.div
             className="profile-orbit-frame relative z-20 aspect-square w-[min(86%,24rem)] rounded-full p-[3px] [transform-style:preserve-3d]"
             initial={false}
@@ -269,7 +229,7 @@ export function Hero() {
               </motion.div>
             </div>
           </motion.div>
-         </motion.div>
+         </div>
           <LiveCodeTerminal />
         </div>
       </Container>

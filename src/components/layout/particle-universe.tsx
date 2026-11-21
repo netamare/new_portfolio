@@ -76,8 +76,11 @@ export function ParticleUniverse() {
     let height = 0;
     let frame = 0;
     let stars: Star[] = [];
+    let columns = 1;
+    let buckets: number[][] = [];
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const mobile = window.innerWidth < 640;
+      const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.round(width * dpr);
@@ -85,86 +88,133 @@ export function ParticleUniverse() {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.max(18, Math.min(58, Math.round(width / 24)));
+      const count = mobile
+        ? Math.max(88, Math.min(132, Math.round(width / 3.8)))
+        : Math.max(180, Math.min(260, Math.round(width / 7)));
+      const linkDistance = mobile ? 82 : 126;
+      columns = Math.ceil(width / linkDistance) + 1;
+      const rows = Math.ceil(height / linkDistance) + 1;
+      buckets = Array.from({ length: columns * rows }, () => []);
       stars = Array.from({ length: count }, (_, index) => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
-        radius: 0.7 + Math.random() * 1.4,
+        vx: (Math.random() - 0.5) * (mobile ? 0.13 : 0.17),
+        vy: (Math.random() - 0.5) * (mobile ? 0.13 : 0.17),
+        radius: 0.55 + Math.random() * 1.15,
         phase: index * 0.7,
       }));
     };
 
     const draw = (time: number) => {
-      if (document.hidden) {
-        frame = window.requestAnimationFrame(draw);
-        return;
-      }
+      frame = 0;
+      if (document.hidden) return;
       context.clearRect(0, 0, width, height);
       const pointerX = pointerRef.current.active ? pointerRef.current.x : -1000;
       const pointerY = pointerRef.current.active ? pointerRef.current.y : -1000;
-      const linkDistance = width < 640 ? 100 : 145;
+      const linkDistance = width < 640 ? 82 : 126;
+      const linkDistanceSquared = linkDistance * linkDistance;
+      const trailsPath = new Path2D();
+      const pointerLinesPath = pointerRef.current.active ? new Path2D() : null;
 
+      for (const bucket of buckets) bucket.length = 0;
+
+      context.beginPath();
       for (let i = 0; i < stars.length; i += 1) {
         const star = stars[i];
         star.x += star.vx;
         star.y += star.vy;
-        if (star.x < -4) star.x = width + 4;
-        if (star.x > width + 4) star.x = -4;
-        if (star.y < -4) star.y = height + 4;
-        if (star.y > height + 4) star.y = -4;
+        if (star.x < 0) star.x = width;
+        if (star.x > width) star.x = 0;
+        if (star.y < 0) star.y = height;
+        if (star.y > height) star.y = 0;
+        const cellX = Math.min(columns - 1, Math.floor(star.x / linkDistance));
+        const cellY = Math.floor(star.y / linkDistance);
+        buckets[cellY * columns + cellX]?.push(i);
+      }
 
-        const pulse = 0.52 + Math.sin(time * 0.0007 + star.phase) * 0.2;
-        const mouseDistance = Math.hypot(star.x - pointerX, star.y - pointerY);
-        const glow = Math.max(0, 1 - mouseDistance / 170);
-        context.beginPath();
-        context.arc(star.x, star.y, star.radius + glow * 1.8, 0, Math.PI * 2);
-        context.fillStyle = `rgba(157, 132, 255, ${pulse + glow * 0.38})`;
-        context.shadowBlur = 8 + glow * 18;
-        context.shadowColor = glow > 0.1 ? "#38bdf8" : "#8b5cf6";
-        context.fill();
-        context.shadowBlur = 0;
-
-        for (let j = i + 1; j < stars.length; j += 1) {
-          const next = stars[j];
-          const distance = Math.hypot(star.x - next.x, star.y - next.y);
-          if (distance < linkDistance) {
-            context.beginPath();
-            context.moveTo(star.x, star.y);
-            context.lineTo(next.x, next.y);
-            context.strokeStyle = `rgba(104, 117, 255, ${(1 - distance / linkDistance) * 0.13})`;
-            context.lineWidth = 0.7;
-            context.stroke();
+      for (let i = 0; i < stars.length; i += 1) {
+        const star = stars[i];
+        const cellX = Math.min(columns - 1, Math.floor(star.x / linkDistance));
+        const cellY = Math.floor(star.y / linkDistance);
+        for (let offsetY = -1; offsetY <= 1; offsetY += 1) {
+          const neighborY = cellY + offsetY;
+          if (neighborY < 0 || neighborY >= Math.ceil(height / linkDistance) + 1) continue;
+          for (let offsetX = -1; offsetX <= 1; offsetX += 1) {
+            const neighborX = cellX + offsetX;
+            if (neighborX < 0 || neighborX >= columns) continue;
+            const neighbors = buckets[neighborY * columns + neighborX];
+            for (const j of neighbors) {
+              if (j <= i) continue;
+              const next = stars[j];
+              const dx = star.x - next.x;
+              const dy = star.y - next.y;
+              const distanceSquared = dx * dx + dy * dy;
+              if (distanceSquared >= linkDistanceSquared) continue;
+              context.moveTo(star.x, star.y);
+              context.lineTo(next.x, next.y);
+              if ((i + j) % 5 === 0) {
+                const trail = (time * 0.000025 + star.phase * 0.17) % 0.84;
+                trailsPath.moveTo(star.x - dx * trail, star.y - dy * trail);
+                trailsPath.lineTo(star.x - dx * (trail + 0.12), star.y - dy * (trail + 0.12));
+              }
+            }
           }
         }
+      }
+      context.strokeStyle = "rgba(119, 137, 255, 0.105)";
+      context.lineWidth = 0.65;
+      context.stroke();
+      context.strokeStyle = "rgba(125, 211, 252, 0.48)";
+      context.lineWidth = 1.05;
+      context.stroke(trailsPath);
 
-        if (mouseDistance < 185) {
-          context.beginPath();
-          context.moveTo(star.x, star.y);
-          context.lineTo(pointerX, pointerY);
-          context.strokeStyle = `rgba(56, 189, 248, ${(1 - mouseDistance / 185) * 0.25})`;
-          context.lineWidth = 0.8;
-          context.stroke();
+      context.beginPath();
+      for (let i = 0; i < stars.length; i += 1) {
+        const star = stars[i];
+        const pulse = 0.82 + Math.sin(time * 0.0007 + star.phase) * 0.16;
+        const mouseDistance = Math.hypot(star.x - pointerX, star.y - pointerY);
+        const glow = Math.max(0, 1 - mouseDistance / 170);
+        const radius = star.radius * pulse + glow * 1.4;
+        context.moveTo(star.x + radius, star.y);
+        context.arc(star.x, star.y, radius, 0, Math.PI * 2);
+
+        if (pointerLinesPath && mouseDistance < 185) {
+          pointerLinesPath.moveTo(star.x, star.y);
+          pointerLinesPath.lineTo(pointerX, pointerY);
         }
+      }
+      context.fillStyle = "rgba(157, 132, 255, 0.76)";
+      context.fill();
+      if (pointerLinesPath) {
+        context.strokeStyle = "rgba(56, 189, 248, 0.16)";
+        context.lineWidth = 0.75;
+        context.stroke(pointerLinesPath);
       }
       frame = window.requestAnimationFrame(draw);
     };
 
     resize();
     frame = window.requestAnimationFrame(draw);
+    const handleVisibility = () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!frame) {
+        frame = window.requestAnimationFrame(draw);
+      }
+    };
     window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [reduceMotion]);
 
-  if (reduceMotion) return null;
-
   return (
     <>
-      <canvas ref={canvasRef} aria-hidden="true" className="particle-universe pointer-events-none fixed inset-0 -z-10" />
+      <canvas ref={canvasRef} aria-hidden="true" className="particle-universe pointer-events-none fixed inset-0 z-0" />
       {finePointer ? (
         <>
           <CursorTrail x={x} y={y} delay={1} />
