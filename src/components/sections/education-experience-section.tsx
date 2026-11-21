@@ -44,7 +44,7 @@ export function EducationExperienceSection() {
                   <h4 className="mb-5 text-2xl">Computer Science</h4>
                   <span className="inline-flex items-center gap-2 rounded-full border border-blue/20 bg-blue/10 px-3 py-1.5 text-sm font-medium text-slate-200">
                     <span className="size-1.5 rounded-full bg-blue" aria-hidden="true" />
-                    Third-year student
+                    4th Year Computer Science Student
                   </span>
                 </div>
               </article>

@@ -54,9 +54,9 @@ export function Hero() {
         <span key={`${letter}-${index}`} className="hero-name-letter inline-block overflow-hidden align-bottom pb-[0.04em]">
         <motion.span
           className="inline-block"
-            initial={shouldReduceMotion ? false : { y: "115%", opacity: 0, filter: "blur(6px)" }}
-            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: shouldReduceMotion ? 0 : 0.76, delay: shouldReduceMotion ? 0 : delay + index * 0.04, ease: [0.22, 1, 0.36, 1] }}
+          initial={shouldReduceMotion ? false : { y: "120%", opacity: 0, filter: "blur(8px)", scale: 0.94 }}
+          animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.82, delay: shouldReduceMotion ? 0 : delay + index * 0.045, ease: [0.22, 1, 0.36, 1] }}
         >
           {letter}
         </motion.span>
@@ -100,6 +100,7 @@ export function Hero() {
 
           <h1
             id="hero-title"
+            aria-label={portfolio.name}
             className="hero-name-heading mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
           >
             {revealName(portfolio.firstName, 0.22)}{" "}

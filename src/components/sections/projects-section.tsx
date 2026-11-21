@@ -2,6 +2,7 @@
 
 import { Activity, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
@@ -22,118 +23,20 @@ const projects = portfolioProjects.map((project) => ({
 
 type ProjectKind = (typeof projects)[number]["kind"];
 
-function ProjectVisual({ kind }: { kind: ProjectKind }) {
+function ProjectVisual({ image, title }: { image: string; title: string }) {
   return (
-    <div
-      aria-hidden="true"
-      className="relative flex h-48 items-center justify-center overflow-hidden border-b border-white/[0.06] bg-[#0b0e19] sm:h-52"
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgb(139_92_246_/_16%),transparent_65%)] transition-opacity duration-500 group-hover:opacity-75" />
-      <div className="absolute inset-0 opacity-20 transition-opacity duration-500 group-hover:opacity-40 [background-image:linear-gradient(rgb(255_255_255_/_5%)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255_/_5%)_1px,transparent_1px)] [background-size:28px_28px]" />
-
-      {kind === "flight" ? (
-        <div className="relative w-[82%] max-w-sm -rotate-2 rounded-2xl border border-white/10 bg-[#111827]/90 p-4 shadow-[0_18px_60px_rgb(0_0_0_/_45%)] transition-transform duration-500 group-hover:rotate-0 group-hover:scale-[1.03] sm:p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-200">
-              <span className="flex size-7 items-center justify-center rounded-lg bg-blue/10 text-blue">
-                <Plane size={14} aria-hidden="true" />
-              </span>
-              Find your next journey
-            </div>
-            <span className="size-2 rounded-full bg-blue shadow-[0_0_12px_rgb(56_189_248_/_75%)]" />
-          </div>
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-xl border border-white/[0.07] bg-background/70 p-3">
-            <div>
-              <div className="mb-2 h-1.5 w-8 rounded-full bg-secondary/30" />
-              <div className="h-2 w-14 rounded-full bg-slate-200/80" />
-            </div>
-            <div className="flex items-center gap-1.5 text-blue/80">
-              <span className="h-px w-6 border-t border-dashed border-blue/50" />
-              <Plane size={15} aria-hidden="true" />
-              <span className="h-px w-6 border-t border-dashed border-blue/50" />
-            </div>
-            <div className="justify-self-end">
-              <div className="mb-2 ml-auto h-1.5 w-8 rounded-full bg-secondary/30" />
-              <div className="ml-auto h-2 w-14 rounded-full bg-slate-200/80" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-center gap-2">
-            <span className="h-1.5 w-[38%] rounded-full bg-purple/60" />
-            <span className="h-1.5 w-[24%] rounded-full bg-blue/50" />
-            <span className="ml-auto h-1.5 w-10 rounded-full bg-white/10" />
-          </div>
-        </div>
-      ) : null}
-
-      {kind === "student" ? (
-        <div className="relative grid w-[82%] max-w-sm grid-cols-[1.05fr_0.95fr] gap-3 -rotate-1 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-[1.03]">
-          <div className="rounded-2xl border border-white/10 bg-[#111827]/95 p-4 shadow-[0_18px_60px_rgb(0_0_0_/_45%)]">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="h-2 w-20 rounded-full bg-slate-200/75" />
-              <CalendarDays size={15} className="text-purple" aria-hidden="true" />
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {Array.from({ length: 12 }, (_, index) => (
-                <span
-                  key={index}
-                  className={`aspect-square rounded-md border border-white/[0.04] ${index === 5 ? "bg-purple/70 shadow-[0_0_14px_rgb(139_92_246_/_28%)]" : "bg-white/[0.04]"}`}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex-1 rounded-2xl border border-white/10 bg-[#111827]/90 p-4 shadow-[0_18px_60px_rgb(0_0_0_/_35%)]">
-              <div className="mb-4 h-2 w-16 rounded-full bg-slate-200/70" />
-              <div className="space-y-2.5">
-                <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-blue/80" /><span className="h-1.5 w-16 rounded-full bg-white/15" /></span>
-                <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-purple/80" /><span className="h-1.5 w-12 rounded-full bg-white/15" /></span>
-                <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-400/80" /><span className="h-1.5 w-14 rounded-full bg-white/15" /></span>
-              </div>
-            </div>
-            <div className="rounded-xl border border-purple/20 bg-purple/10 p-3">
-              <div className="h-1.5 w-12 rounded-full bg-purple/55" />
-              <div className="mt-2 h-1.5 w-20 rounded-full bg-purple/20" />
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {kind === "monitoring" ? (
-        <div className="relative w-[82%] max-w-sm rotate-1 rounded-2xl border border-white/10 bg-[#111827]/95 p-4 shadow-[0_18px_60px_rgb(0_0_0_/_45%)] transition-transform duration-500 group-hover:rotate-0 group-hover:scale-[1.03] sm:p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="flex size-7 items-center justify-center rounded-lg bg-blue/10 text-blue">
-                <Activity size={15} aria-hidden="true" />
-              </span>
-              <span className="h-2 w-28 rounded-full bg-slate-200/75" />
-            </div>
-            <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-1 text-[9px] font-medium text-emerald-300">LIVE</span>
-          </div>
-          <div className="grid grid-cols-[0.8fr_1.2fr] gap-3">
-            <div className="space-y-2 rounded-xl border border-white/[0.06] bg-background/65 p-3">
-              <span className="block h-1.5 w-14 rounded-full bg-white/15" />
-              <span className="block h-1.5 w-10 rounded-full bg-white/10" />
-              <span className="block h-1.5 w-12 rounded-full bg-white/10" />
-            </div>
-            <div className="flex h-20 items-end justify-around gap-2 rounded-xl border border-white/[0.06] bg-background/65 px-3 pb-3 pt-2">
-              {[34, 58, 42, 76, 52, 68, 45].map((height, index) => (
-                <span
-                  key={index}
-                  className={`w-full rounded-t-sm ${index % 2 === 0 ? "bg-blue/55" : "bg-purple/60"}`}
-                  style={{ height: `${height}%` }}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="mt-3 flex gap-2">
-            <span className="h-1.5 w-1/3 rounded-full bg-blue/35" />
-            <span className="h-1.5 w-1/4 rounded-full bg-purple/35" />
-            <span className="h-1.5 w-1/5 rounded-full bg-white/10" />
-          </div>
-        </div>
-      ) : null}
-
-      <span className="absolute right-5 top-5 flex size-8 items-center justify-center rounded-full border border-white/10 bg-background/65 text-slate-300 backdrop-blur-sm">
+    <div className="relative h-48 overflow-hidden border-b border-white/[0.06] bg-[#080b14] p-2 sm:h-52 sm:p-3">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgb(139_92_246_/_18%),transparent_68%)]" />
+      <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080b14] shadow-[0_18px_55px_rgb(0_0_0_/_45%)]">
+        <Image
+          src={image}
+          alt={`${title} project screenshot`}
+          fill
+          sizes="(max-width: 640px) 92vw, (max-width: 1023px) 46vw, 31vw"
+          className="object-contain transition-transform duration-500 group-hover:scale-[1.025]"
+        />
+      </div>
+      <span className="absolute right-5 top-5 flex size-8 items-center justify-center rounded-full border border-white/10 bg-background/75 text-slate-300 backdrop-blur-sm">
         <ArrowDownRight size={15} aria-hidden="true" />
       </span>
     </div>
@@ -209,10 +112,10 @@ export function ProjectsSection() {
 
         <div ref={viewportRef} className={horizontal && !reduceMotion ? "projects-rail-viewport" : "mt-12"}>
          <motion.div ref={railRef} style={horizontal && !reduceMotion ? { x: railX } : undefined} className={horizontal && !reduceMotion ? "projects-rail" : "grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7"}>
-          {projects.map(({ title, description, technologies, kind, Icon, accent }, index) => (
+          {projects.map(({ title, description, technologies, kind, image, Icon, accent }, index) => (
             <AnimatedReveal key={title} delay={0.08 + index * 0.1} className={horizontal && !reduceMotion ? "project-rail-card" : "h-full"} tilt>
               <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-surface/65 shadow-[0_16px_50px_rgb(0_0_0_/_14%)] transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:border-purple/55 hover:shadow-[0_24px_65px_rgb(0_0_0_/_28%),0_0_38px_rgb(139_92_246_/_16%)]">
-                <ProjectVisual kind={kind} />
+                <ProjectVisual image={image} title={title} />
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <div className="mb-3 flex items-start gap-3">
                     <span className={`mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] ${accent}`}>
@@ -258,7 +161,7 @@ export function ProjectsSection() {
               <h2 id="project-dialog-title" className="mb-3 text-2xl sm:text-4xl">{selected.title}</h2>
               <p className="mb-7 max-w-2xl text-base leading-7">{selected.overview}</p>
               <div className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0e19] [&>div]:h-64 [&>div]:border-b-0 sm:[&>div]:h-80">
-                <ProjectVisual kind={selected.kind} />
+                <ProjectVisual image={selected.image} title={selected.title} />
               </div>
                 <div className="grid gap-7 sm:grid-cols-2">
                 <div>

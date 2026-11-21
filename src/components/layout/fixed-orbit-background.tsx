@@ -22,6 +22,8 @@ export function FixedOrbitBackground() {
   return (
     <div aria-hidden="true" className="fixed-orbit-background pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="fixed-orbit-background__aura" />
+      <div className="fixed-orbit-background__constellation" />
+      <div className="fixed-orbit-background__core" />
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--wide" />
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--tall" />
       <div className="fixed-orbit-background__ring fixed-orbit-background__ring--inner" />

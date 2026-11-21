@@ -30,9 +30,9 @@ export const portfolio = {
 };
 
 export const skillGroups = [
-  { title: "Mobile", skills: ["Flutter", "Dart", "Kotlin"] },
-  { title: "Web", skills: ["HTML", "CSS", "JavaScript", "Next.js"] },
-  { title: "Backend & Database", skills: ["Firebase", "MongoDB"] },
+  { title: "Mobile", skills: ["Flutter", "Dart", "Kotlin", "React Native"] },
+  { title: "Web", skills: ["HTML", "CSS", "JavaScript", "Next.js", "API Integration"] },
+  { title: "Backend & Database", skills: ["Firebase", "MongoDB", "Supabase"] },
   { title: "Tools", skills: ["Git", "GitHub", "VS Code", "Android Studio"] },
   { title: "Creative", skills: ["UI/UX Design", "Video Editing"] },
 ] as const;
@@ -47,6 +47,7 @@ export const projects = [
     githubUrl: "",
     liveUrl: "",
     kind: "flight",
+    image: "/images/projects/wellfly.png",
   },
   {
     title: "University Student Helper",
@@ -57,9 +58,10 @@ export const projects = [
     githubUrl: "",
     liveUrl: "",
     kind: "student",
+    image: "/images/projects/student-helper.png",
   },
   {
-    title: "Call Center 9141 – Response Monitoring System",
+    title: "Call Center 9141 Events Escalation and Response Monitoring System",
     description: "A web-based system for tracking citizen complaints, responses, and department performance.",
     technologies: ["HTML", "CSS", "JavaScript"],
     overview: "A web-based system for tracking citizen complaints, responses, and department performance.",
@@ -67,5 +69,6 @@ export const projects = [
     githubUrl: "",
     liveUrl: "",
     kind: "monitoring",
+    image: "/images/projects/call-center.png",
   },
 ] as const;
