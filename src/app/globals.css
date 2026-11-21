@@ -516,11 +516,64 @@ a {
 }
 
 .hero-name-heading {
+  position: relative;
+  isolation: isolate;
   animation: hero-name-glow 7s ease-in-out infinite alternate;
 }
 
 .hero-name-letter {
   text-shadow: 0 0 22px rgb(167 139 250 / 14%);
+}
+
+.hero-name-letter__glyph {
+  display: inline-block;
+  color: transparent;
+  background-image: linear-gradient(108deg, #c4b5fd 0%, #a78bfa 22%, #7dd3fc 44%, #f5e9ff 51%, #8b5cf6 68%, #93c5fd 88%, #c4b5fd 100%);
+  background-size: 260% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-name-letter-wave 2.8s ease-in-out infinite, hero-name-gradient-flow 5.6s ease-in-out infinite, hero-name-letter-shimmer 3.4s ease-in-out infinite;
+  will-change: transform, background-position, filter;
+}
+
+.hero-name-heading::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  content: attr(data-name);
+  color: transparent;
+  white-space: normal;
+  background: linear-gradient(108deg, transparent 43%, rgb(255 255 255 / 10%) 48%, rgb(255 255 255 / 74%) 50%, rgb(125 211 252 / 28%) 52%, transparent 58%);
+  background-size: 280% 100%;
+  background-position: 145% 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-name-light-sweep 6.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgb(186 230 253 / 30%));
+}
+
+@keyframes hero-name-letter-wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes hero-name-gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes hero-name-letter-shimmer {
+  0%, 100% { filter: brightness(1) drop-shadow(0 0 3px rgb(167 139 250 / 20%)); }
+  50% { filter: brightness(1.18) drop-shadow(0 0 9px rgb(125 211 252 / 36%)); }
+}
+
+@keyframes hero-name-light-sweep {
+  0%, 18% { background-position: 145% 0; opacity: 0; }
+  34% { opacity: .78; }
+  60%, 100% { background-position: -55% 0; opacity: 0; }
 }
 
 @keyframes hero-name-glow {
@@ -1238,36 +1291,86 @@ a {
   box-shadow: 0 0 38px rgb(56 189 248 / 12%), inset 0 0 22px rgb(139 92 246 / 6%);
 }
 
-.journey-timeline__spine {
+.journey-timeline__path {
   position: absolute;
-  top: 0.75rem;
-  bottom: 0.75rem;
-  left: 50%;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, rgb(167 139 250 / 70%) 8%, rgb(56 189 248 / 58%) 88%, transparent);
-  box-shadow: 0 0 18px rgb(139 92 246 / 35%);
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.journey-timeline__path--mobile { display: none; }
+
+.journey-timeline__stroke {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.journey-timeline__stroke--glow {
+  stroke: rgb(249 115 22 / 34%);
+  stroke-width: 12px;
+  filter: blur(4px);
+}
+
+.journey-timeline__stroke--core {
+  stroke: rgb(253 186 116 / 92%);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 7px rgb(251 146 60 / 78%));
+}
+
+.journey-timeline__list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: repeat(4, 17rem);
 }
 
 .journey-timeline__item {
-  width: 50%;
-  padding-right: 2rem;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  align-items: center;
 }
 
-.journey-timeline__item:nth-child(odd) {
-  margin-left: 50%;
-  padding-right: 0;
-  padding-left: 2rem;
+.journey-timeline__card-wrap {
+  position: relative;
+  z-index: 1;
+  width: calc(50% - 3.5rem);
 }
+
+.journey-timeline__item:nth-child(odd) .journey-timeline__card-wrap { margin-right: auto; }
+.journey-timeline__item:nth-child(even) .journey-timeline__card-wrap { margin-left: auto; }
 
 .journey-timeline__node {
-  top: 1.75rem;
-  right: -0.5625rem;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-image: radial-gradient(circle at 35% 30%, rgb(251 146 60 / 18%), transparent 68%);
 }
 
-.journey-timeline__item:nth-child(odd) .journey-timeline__node {
-  right: auto;
-  left: -0.5625rem;
+.journey-timeline__card {
+  border-color: rgb(251 146 60 / 24%);
+  background: linear-gradient(145deg, rgb(24 20 18 / 97%), rgb(13 14 18 / 97%));
+  box-shadow: inset 0 1px 0 rgb(255 237 213 / 4%), 0 18px 50px rgb(0 0 0 / 24%);
 }
+
+.journey-timeline__card:hover {
+  border-color: rgb(251 146 60 / 55%);
+  background-color: rgb(28 22 18 / 98%);
+  box-shadow: inset 0 1px 0 rgb(255 237 213 / 6%), 0 22px 55px rgb(0 0 0 / 28%), 0 0 34px rgb(249 115 22 / 10%);
+}
+
+.journey-timeline__icon {
+  border-color: rgb(251 146 60 / 28%);
+  background: rgb(249 115 22 / 9%);
+  color: #fdba74;
+}
+
+.journey-timeline__label { color: #fdba74; }
+.journey-timeline__related { border-color: rgb(251 146 60 / 16%); }
 
 /* A larger central sphere and constellation make the existing orbital scene read as one focal composition. */
 .fixed-orbit-background__ring--inner { scale: 1.5; }
@@ -1329,18 +1432,17 @@ a {
 }
 
 @media (max-width: 640px) {
-  .journey-timeline__spine { left: 1.0625rem; }
-  .journey-timeline__item,
-  .journey-timeline__item:nth-child(odd) {
+  .journey-timeline__path--desktop { display: none; }
+  .journey-timeline__path--mobile { display: block; }
+  .journey-timeline__list { grid-template-rows: repeat(4, 23.5rem); }
+  .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(odd) .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(even) .journey-timeline__card-wrap {
     width: 100%;
-    margin-left: 0;
-    padding: 0 0 0 3rem;
+    margin: 0;
+    padding-left: 4.5rem;
   }
-  .journey-timeline__node,
-  .journey-timeline__item:nth-child(odd) .journey-timeline__node {
-    right: auto;
-    left: 0.5rem;
-  }
+  .journey-timeline__node { left: 10%; }
   .fixed-orbit-background__core { width: clamp(12rem, 58vw, 22rem); }
   .fixed-orbit-background__constellation { width: 88vw; }
   .ambient-augmentation-layer { opacity: .66; }
@@ -1353,8 +1455,23 @@ a {
   .ambient-augmentation-glass-sphere { top: 69%; left: 8%; }
 }
 
+@media (max-width: 380px) {
+  .journey-timeline__list { grid-template-rows: repeat(4, 27rem); }
+  .journey-timeline__card > .flex.items-start.gap-4 {
+    display: block;
+  }
+  .journey-timeline__card > .flex.items-start.gap-4 > .journey-timeline__icon {
+    margin-bottom: 0.75rem;
+  }
+  .journey-timeline__card > .flex.items-start.gap-4 > div {
+    width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-name-heading { animation: none; }
+  .hero-name-heading::after,
+  .hero-name-letter__glyph { animation: none; }
   .fixed-orbit-background__constellation,
   .fixed-orbit-background__core { animation: none; }
   .ambient-augmentation-orbit,

@@ -25,13 +25,13 @@ export function EducationExperienceSection() {
           />
         </AnimatedReveal>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
+        <div className="mt-12">
           <div>
             <AnimatedReveal>
               <h3 className="mb-5 text-xl">Education</h3>
             </AnimatedReveal>
             <AnimatedReveal delay={0.08}>
-              <article className="relative overflow-hidden rounded-2xl border border-purple/20 bg-gradient-to-br from-surface/90 to-surface/50 p-6 shadow-[0_18px_55px_rgb(0_0_0_/_20%)] sm:p-7">
+              <article className="relative max-w-2xl overflow-hidden rounded-2xl border border-purple/20 bg-gradient-to-br from-surface/90 to-surface/50 p-6 shadow-[0_18px_55px_rgb(0_0_0_/_20%)] sm:p-7">
                 <div
                   aria-hidden="true"
                   className="absolute -right-12 -top-12 size-40 rounded-full bg-purple/10 blur-3xl"
@@ -51,7 +51,7 @@ export function EducationExperienceSection() {
             </AnimatedReveal>
           </div>
 
-          <div>
+          <div className="mt-16 sm:mt-20">
             <AnimatedReveal>
               <h3 className="mb-5 text-xl">Development Journey</h3>
             </AnimatedReveal>

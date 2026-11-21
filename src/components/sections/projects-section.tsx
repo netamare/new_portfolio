@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
+import { Activity, ArrowDown, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
@@ -147,7 +147,7 @@ export function ProjectsSection() {
           ))}
          </motion.div>
         </div>
-        {horizontal && !reduceMotion ? <div className="projects-scroll-indicator" aria-hidden="true"><span>Keep scrolling</span><span className="projects-scroll-icon">↓</span></div> : null}
+        {horizontal && !reduceMotion ? <div className="projects-scroll-indicator" aria-hidden="true"><span>Keep scrolling</span><span className="projects-scroll-icon"><ArrowDown size={14} strokeWidth={1.8} /></span></div> : null}
       </Container>
       </div>
       {selected ? (

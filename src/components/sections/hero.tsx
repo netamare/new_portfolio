@@ -12,7 +12,6 @@ import Image from "next/image";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { GradientText } from "@/components/ui/gradient-text";
 import { portfolio } from "@/data/portfolio";
 import { cvFileName, cvFilePath } from "@/data/cv";
 import { LiveCodeTerminal } from "@/components/sections/live-code-terminal";
@@ -49,25 +48,23 @@ export function Hero() {
         ease: [0.22, 1, 0.36, 1] as const,
       },
     });
-  const revealName = (value: string, delay: number, gradient = false) => {
+  const revealName = (value: string, delay: number, letterOffset = 0) => {
     const letters = Array.from(value).map((letter, index) => (
-        <span key={`${letter}-${index}`} className="hero-name-letter inline-block overflow-hidden align-bottom pb-[0.04em]">
+      <span key={`${letter}-${index}`} className="hero-name-letter inline-block overflow-hidden align-bottom pb-[0.04em]">
         <motion.span
-          className="inline-block"
+          className="hero-name-letter__reveal inline-block"
           initial={shouldReduceMotion ? false : { y: "120%", opacity: 0, filter: "blur(8px)", scale: 0.94 }}
           animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
           transition={{ duration: shouldReduceMotion ? 0 : 0.82, delay: shouldReduceMotion ? 0 : delay + index * 0.045, ease: [0.22, 1, 0.36, 1] }}
         >
-          {letter}
+          <span className="hero-name-letter__glyph" style={{ animationDelay: `${(letterOffset + index) * -0.13}s` }}>
+            {letter}
+          </span>
         </motion.span>
       </span>
     ));
 
-    return (
-      <motion.span {...enter(delay)} className="inline-block">
-        {gradient ? <GradientText>{letters}</GradientText> : letters}
-      </motion.span>
-    );
+    return <motion.span {...enter(delay)} className="inline-block">{letters}</motion.span>;
   };
 
   return (
@@ -101,10 +98,11 @@ export function Hero() {
           <h1
             id="hero-title"
             aria-label={portfolio.name}
+            data-name={portfolio.name}
             className="hero-name-heading mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
           >
             {revealName(portfolio.firstName, 0.22)}{" "}
-            {revealName(portfolio.lastName, 0.3, true)}
+            {revealName(portfolio.lastName, 0.3, Array.from(portfolio.firstName).length)}
           </h1>
 
           <motion.p
