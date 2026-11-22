@@ -905,8 +905,8 @@ a {
   height: 100svh;
   min-height: 600px;
   align-items: center;
-  overflow: hidden;
-  padding: 5.5rem 0 3.5rem;
+  overflow: visible;
+  padding: 1rem 0 2rem;
   background:
     radial-gradient(ellipse at 50% 45%, transparent 28%, rgb(8 9 15 / 42%) 88%),
     linear-gradient(rgb(255 255 255 / 1.2%) 1px, transparent 1px),
@@ -926,31 +926,25 @@ a {
 .projects-sticky .projects-rail-viewport {
   width: 100%;
   overflow: hidden;
-  padding: 0 0.25rem;
-  mask-image: linear-gradient(90deg, transparent, #000 5% 95%, transparent);
+  padding: 1rem 0.5rem;
 }
 
 .projects-rail {
   display: flex;
+  align-items: stretch;
   width: max-content;
   gap: 1.5rem;
-  padding: 0.75rem 0.25rem;
+  padding: 0 0.25rem;
   will-change: transform;
 }
 
 .project-rail-card {
-  width: clamp(19rem, 31vw, 25rem);
-  height: min(28rem, calc(100svh - 17rem));
-  min-height: 24rem;
+  width: clamp(17.5rem, calc((100vw - 11rem) / 3), 20.8rem);
   flex: 0 0 auto;
 }
 
 .project-rail-card article {
   height: 100%;
-}
-
-.project-rail-card article > div:first-child {
-  flex: 0 0 12rem;
 }
 
 .projects-scroll-indicator {
@@ -979,19 +973,6 @@ a {
 @keyframes scroll-cue {
   0%, 100% { transform: translateY(-2px); }
   50% { transform: translateY(3px); }
-}
-
-@media (max-height: 700px) and (min-width: 1024px) {
-  .projects-sticky {
-    min-height: 0;
-    padding-top: 4.6rem;
-    padding-bottom: 2.6rem;
-  }
-
-  .project-rail-card {
-    height: min(24rem, calc(100svh - 13rem));
-    min-height: 20rem;
-  }
 }
 
 @media (max-width: 1023px) {
@@ -1310,15 +1291,15 @@ a {
 }
 
 .journey-timeline__stroke--glow {
-  stroke: rgb(249 115 22 / 34%);
+  stroke: rgb(139 92 246 / 30%);
   stroke-width: 12px;
   filter: blur(4px);
 }
 
 .journey-timeline__stroke--core {
-  stroke: rgb(253 186 116 / 92%);
+  stroke: rgb(196 181 253 / 92%);
   stroke-width: 2.5px;
-  filter: drop-shadow(0 0 7px rgb(251 146 60 / 78%));
+  filter: drop-shadow(0 0 7px rgb(139 92 246 / 72%)) drop-shadow(0 0 10px rgb(56 189 248 / 24%));
 }
 
 .journey-timeline__list {
@@ -1348,29 +1329,54 @@ a {
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-  background-image: radial-gradient(circle at 35% 30%, rgb(251 146 60 / 18%), transparent 68%);
+  background-image: radial-gradient(circle at 35% 30%, rgb(167 139 250 / 22%), transparent 68%);
 }
 
 .journey-timeline__card {
-  border-color: rgb(251 146 60 / 24%);
-  background: linear-gradient(145deg, rgb(24 20 18 / 97%), rgb(13 14 18 / 97%));
-  box-shadow: inset 0 1px 0 rgb(255 237 213 / 4%), 0 18px 50px rgb(0 0 0 / 24%);
+  border-color: rgb(139 92 246 / 27%);
+  background: linear-gradient(145deg, rgb(22 18 35 / 97%), rgb(13 14 24 / 97%));
+  box-shadow: inset 0 1px 0 rgb(221 214 254 / 5%), 0 18px 50px rgb(0 0 0 / 24%);
 }
 
 .journey-timeline__card:hover {
-  border-color: rgb(251 146 60 / 55%);
-  background-color: rgb(28 22 18 / 98%);
-  box-shadow: inset 0 1px 0 rgb(255 237 213 / 6%), 0 22px 55px rgb(0 0 0 / 28%), 0 0 34px rgb(249 115 22 / 10%);
+  border-color: rgb(167 139 250 / 58%);
+  background-color: rgb(24 20 38 / 98%);
+  box-shadow: inset 0 1px 0 rgb(221 214 254 / 7%), 0 22px 55px rgb(0 0 0 / 28%), 0 0 34px rgb(139 92 246 / 13%);
 }
 
 .journey-timeline__icon {
-  border-color: rgb(251 146 60 / 28%);
-  background: rgb(249 115 22 / 9%);
-  color: #fdba74;
+  border-color: rgb(167 139 250 / 30%);
+  background: rgb(139 92 246 / 10%);
+  color: #c4b5fd;
 }
 
-.journey-timeline__label { color: #fdba74; }
-.journey-timeline__related { border-color: rgb(251 146 60 / 16%); }
+.journey-timeline__label { color: #c4b5fd; }
+.journey-timeline__related { border-color: rgb(139 92 246 / 20%); }
+
+.journey-timeline__item:nth-child(even) .journey-timeline__node {
+  border-color: rgb(56 189 248 / 76%);
+  color: #bae6fd;
+  box-shadow: 0 0 24px rgb(56 189 248 / 18%), 0 0 20px rgb(139 92 246 / 12%);
+}
+
+.journey-timeline__item:nth-child(even) .journey-timeline__card {
+  border-color: rgb(56 189 248 / 24%);
+  background: linear-gradient(145deg, rgb(16 22 36 / 97%), rgb(13 14 24 / 97%));
+}
+
+.journey-timeline__item:nth-child(even) .journey-timeline__card:hover {
+  border-color: rgb(56 189 248 / 52%);
+  box-shadow: inset 0 1px 0 rgb(186 230 253 / 6%), 0 22px 55px rgb(0 0 0 / 28%), 0 0 34px rgb(56 189 248 / 11%);
+}
+
+.journey-timeline__item:nth-child(even) .journey-timeline__icon {
+  border-color: rgb(56 189 248 / 28%);
+  background: rgb(56 189 248 / 8%);
+  color: #7dd3fc;
+}
+
+.journey-timeline__item:nth-child(even) .journey-timeline__label { color: #7dd3fc; }
+.journey-timeline__item:nth-child(even) .journey-timeline__related { border-color: rgb(56 189 248 / 18%); }
 
 /* A larger central sphere and constellation make the existing orbital scene read as one focal composition. */
 .fixed-orbit-background__ring--inner { scale: 1.5; }

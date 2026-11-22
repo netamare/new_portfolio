@@ -5,20 +5,25 @@ import { Code2, Database, Palette, Smartphone, Wrench } from "lucide-react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { TechnologyIcon } from "@/components/ui/technology-icons";
 import { skillGroups as portfolioSkills } from "@/data/portfolio";
 
-const skillGroups = [
-  { title: "Mobile", skills: ["Flutter", "Dart", "Kotlin"], Icon: Smartphone, color: "text-purple", glow: "group-hover:shadow-purple/10" },
-  { title: "Web", skills: ["HTML", "CSS", "JavaScript", "Next.js"], Icon: Code2, color: "text-blue", glow: "group-hover:shadow-blue/10" },
-  { title: "Backend & Database", skills: ["Firebase", "MongoDB"], Icon: Database, color: "text-purple", glow: "group-hover:shadow-purple/10" },
-  { title: "Tools", skills: ["Git", "GitHub", "VS Code", "Android Studio"], Icon: Wrench, color: "text-blue", glow: "group-hover:shadow-blue/10" },
-  { title: "Creative", skills: ["UI/UX Design", "Video Editing"], Icon: Palette, color: "text-purple", glow: "group-hover:shadow-purple/10" },
-].map((group, index) => ({ ...group, skills: portfolioSkills[index].skills }));
+const skillGroupStyles = {
+  Mobile: { Icon: Smartphone, color: "text-purple", glow: "group-hover:shadow-purple/10" },
+  "Programming Languages": { Icon: Code2, color: "text-purple", glow: "group-hover:shadow-purple/10" },
+  Web: { Icon: Code2, color: "text-blue", glow: "group-hover:shadow-blue/10" },
+  "Backend & Database": { Icon: Database, color: "text-purple", glow: "group-hover:shadow-purple/10" },
+  Tools: { Icon: Wrench, color: "text-blue", glow: "group-hover:shadow-blue/10" },
+  Creative: { Icon: Palette, color: "text-purple", glow: "group-hover:shadow-purple/10" },
+} as const;
+
+const skillGroups = portfolioSkills.map((group) => ({ ...group, ...skillGroupStyles[group.title] }));
 
 const orbitPositions = [
   { x: 50, y: 5 },
   { x: 93, y: 36 },
   { x: 77, y: 88 },
+  { x: 50, y: 96 },
   { x: 23, y: 88 },
   { x: 7, y: 36 },
 ];
@@ -103,8 +108,9 @@ export function SkillsSection() {
                   {skills.map((skill) => (
                     <li
                       key={skill}
-                      className="rounded-full border border-border/80 bg-background/70 px-3 py-1.5 text-sm text-slate-300 transition-colors duration-200 group-hover:border-white/15"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3 py-1.5 text-sm text-slate-300 transition-colors duration-200 group-hover:border-white/15"
                     >
+                      <TechnologyIcon name={skill} className="size-4 shrink-0" />
                       {skill}
                     </li>
                   ))}

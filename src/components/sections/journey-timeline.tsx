@@ -106,7 +106,7 @@ export function JourneyTimeline() {
           <li key={number} className="journey-timeline__item relative">
             <motion.span
               aria-hidden="true"
-              className="journey-timeline__node absolute z-10 flex size-12 items-center justify-center rounded-full border-2 border-orange-300/80 bg-[#14110f] font-mono text-sm font-semibold tracking-wide text-orange-200 shadow-[0_0_24px_rgb(251_146_60_/_22%)] sm:size-[3.25rem]"
+              className="journey-timeline__node absolute z-10 flex size-12 items-center justify-center rounded-full border-2 border-purple/80 bg-[#11101a] font-mono text-sm font-semibold tracking-wide text-violet-100 shadow-[0_0_24px_rgb(139_92_246_/_24%),0_0_20px_rgb(56_189_248_/_10%)] sm:size-[3.25rem]"
               initial={false}
               whileInView={shouldReduceMotion ? undefined : { scale: [0.82, 1], opacity: [0.5, 1] }}
               viewport={{ once: true, amount: 0.5 }}

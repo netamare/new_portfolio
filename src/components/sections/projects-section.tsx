@@ -1,12 +1,13 @@
 "use client";
 
-import { Activity, ArrowDown, ArrowDownRight, CalendarDays, CodeXml, ExternalLink, Plane, X } from "lucide-react";
+import { Activity, ArrowDown, ArrowDownRight, CalendarDays, ExternalLink, Plane, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { GithubMark } from "@/components/ui/social-icons";
 import { projects as portfolioProjects } from "@/data/portfolio";
 
 const projectVisuals = {
@@ -25,7 +26,7 @@ type ProjectKind = (typeof projects)[number]["kind"];
 
 function ProjectVisual({ image, title }: { image: string; title: string }) {
   return (
-    <div className="relative h-48 overflow-hidden border-b border-white/[0.06] bg-[#080b14] p-2 sm:h-52 sm:p-3">
+    <div className="relative h-44 overflow-hidden border-b border-white/[0.06] bg-[#080b14] p-2 sm:p-3">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgb(139_92_246_/_18%),transparent_68%)]" />
       <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080b14] shadow-[0_18px_55px_rgb(0_0_0_/_45%)]">
         <Image
@@ -54,16 +55,21 @@ export function ProjectsSection() {
   const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
   const railX = useTransform(scrollYProgress, [0, 1], [0, -travel]);
   const selected = projects.find((project) => project.kind === selectedProject);
+  const selectedLiveUrl: string = selected?.liveUrl ?? "";
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 1024px)");
+    // Keep the animated horizontal rail for roomy desktop viewports. On shorter
+    // screens the normal grid gives each full-height card enough vertical space.
+    const media = window.matchMedia("(min-width: 1024px) and (min-height: 820px)");
     const updateLayout = () => {
       setHorizontal(media.matches);
       if (!viewportRef.current || !railRef.current || !media.matches) {
         setTravel(0);
         return;
       }
-      setTravel(Math.max(0, railRef.current.scrollWidth - viewportRef.current.clientWidth));
+      // Keep a small rail movement while leaving enough inset for all three
+      // cards to remain inside the clipping viewport at either endpoint.
+      setTravel(Math.max(8, railRef.current.scrollWidth - viewportRef.current.clientWidth + 8));
     };
     const observer = new ResizeObserver(updateLayout);
     if (viewportRef.current) observer.observe(viewportRef.current);
@@ -94,7 +100,7 @@ export function ProjectsSection() {
       ref={trackRef}
       id="projects"
       aria-labelledby="projects-heading"
-      className={`relative scroll-mt-20 ${horizontal && !reduceMotion ? "projects-scroll-track" : "py-24 sm:py-32"}`}
+      className={`relative scroll-mt-20 ${horizontal && !reduceMotion ? "projects-scroll-track" : "pt-10 pb-24 sm:py-32"}`}
       style={horizontal && !reduceMotion ? { height: `calc(100svh + ${travel}px)` } : undefined}
     >
       <div className={horizontal && !reduceMotion ? "projects-sticky" : "relative"}>
@@ -116,7 +122,7 @@ export function ProjectsSection() {
             <AnimatedReveal key={title} delay={0.08 + index * 0.1} className={horizontal && !reduceMotion ? "project-rail-card" : "h-full"} tilt>
               <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-surface/65 shadow-[0_16px_50px_rgb(0_0_0_/_14%)] transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:border-purple/55 hover:shadow-[0_24px_65px_rgb(0_0_0_/_28%),0_0_38px_rgb(139_92_246_/_16%)]">
                 <ProjectVisual image={image} title={title} />
-                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                <div className="flex flex-1 flex-col p-5 sm:p-3.5">
                   <div className="mb-3 flex items-start gap-3">
                     <span className={`mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] ${accent}`}>
                       <Icon size={17} strokeWidth={1.8} aria-hidden="true" className="transition-transform duration-300 group-hover:scale-110" />
@@ -134,11 +140,11 @@ export function ProjectsSection() {
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-white/[0.07] pt-5">
-                    <button type="button" onClick={() => setSelectedProject(kind)} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-gradient-to-r from-purple to-blue px-4 text-sm font-semibold text-white shadow-[0_0_24px_rgb(139_92_246_/_18%)] transition hover:shadow-[0_0_30px_rgb(139_92_246_/_32%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+                  <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/[0.07] pt-3">
+                    <button type="button" onClick={() => setSelectedProject(kind)} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-gradient-to-r from-purple to-blue px-3 text-sm font-semibold text-white shadow-[0_0_24px_rgb(139_92_246_/_18%)] transition hover:shadow-[0_0_30px_rgb(139_92_246_/_32%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
                       Explore project <ArrowDownRight size={15} aria-hidden="true" />
                     </button>
-                    {projects[index].githubUrl ? <a href={projects[index].githubUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-slate-300 transition hover:border-purple/60 hover:text-white"><CodeXml size={15} aria-hidden="true" /> GitHub</a> : null}
+                    {projects[index].githubUrl ? <a href={projects[index].githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${title} on GitHub (opens in a new tab)`} className="inline-flex min-h-10 items-center gap-2 rounded-full border border-purple/30 bg-purple/5 px-3 text-sm font-semibold text-slate-200 transition-[border-color,background-color,color] duration-200 hover:border-purple/65 hover:bg-purple/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"><GithubMark size={16} /> View on GitHub</a> : null}
                     {projects[index].liveUrl ? <a href={projects[index].liveUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-slate-300 transition hover:border-blue/60 hover:text-white"><ExternalLink size={15} aria-hidden="true" /> Live demo</a> : null}
                   </div>
                 </div>
@@ -173,7 +179,7 @@ export function ProjectsSection() {
                   <ul className="flex flex-wrap gap-2">{selected.technologies.map((technology) => <li key={technology} className="rounded-full border border-purple/20 bg-purple/[0.08] px-3 py-1.5 text-xs font-medium text-slate-200">{technology}</li>)}</ul>
                 </div>
               </div>
-              {(selected.githubUrl || selected.liveUrl) ? <div className="mt-8 flex flex-wrap gap-3">{selected.githubUrl ? <a href={selected.githubUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-semibold hover:border-purple/60"><CodeXml size={16} /> GitHub</a> : null}{selected.liveUrl ? <a href={selected.liveUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-5 text-sm font-semibold text-white"><ExternalLink size={16} /> Live demo</a> : null}</div> : null}
+              {(selected.githubUrl || selectedLiveUrl) ? <div className="mt-8 flex flex-wrap gap-3">{selected.githubUrl ? <a href={selected.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${selected.title} on GitHub (opens in a new tab)`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-purple/30 bg-purple/5 px-5 text-sm font-semibold text-slate-200 transition hover:border-purple/65 hover:bg-purple/10 hover:text-white"><GithubMark size={16} /> View on GitHub</a> : null}{selectedLiveUrl ? <a href={selectedLiveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-5 text-sm font-semibold text-white"><ExternalLink size={16} /> Live demo</a> : null}</div> : null}
             </div>
           </section>
         </div>
