@@ -1,3 +1,4 @@
+
 const targets = await fetch("http://localhost:9223/json").then((response) => response.json());
 const target = targets.find((item) => item.type === "page" && item.url === "http://localhost:3002/");
 if (!target) throw new Error("Portfolio tab not found");

@@ -52,14 +52,14 @@ export function ContactSection() {
           />
         </AnimatedReveal>
 
-        <div className="mt-12 grid items-start gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:gap-8">
-          <AnimatedReveal delay={0.08}>
+        <div className="mt-12 grid min-w-0 grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:gap-8">
+          <AnimatedReveal delay={0.08} className="min-w-0">
             <div className="rounded-2xl border border-border/80 bg-surface/65 p-5 shadow-[0_22px_70px_rgb(0_0_0_/_22%)] backdrop-blur-md sm:p-8">
               <ContactForm />
             </div>
           </AnimatedReveal>
 
-          <AnimatedReveal delay={0.16}>
+          <AnimatedReveal delay={0.16} className="min-w-0">
             <aside className="rounded-2xl border border-white/[0.07] bg-[#0d111c]/75 p-6 backdrop-blur-md sm:p-7">
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-blue">
                 Other ways to connect

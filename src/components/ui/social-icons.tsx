@@ -1,5 +1,27 @@
 type SocialIconProps = { size?: number };
 
+export function TelegramMark({ size = 18 }: SocialIconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10.5" fill="currentColor" opacity=".14" />
+      <path
+        d="m18.9 5.6-2.7 12.7c-.2.9-.7 1.1-1.4.7l-3.8-2.8-1.8 1.7c-.2.2-.4.4-.8.4l.3-3.9 7.1-6.4c.3-.3-.1-.5-.5-.2L6.5 13.4l-3.8-1.2c-.8-.3-.8-.8.2-1.2L17.7 5c.7-.3 1.4.2 1.2.6Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+export function InstagramMark({ size = 18 }: SocialIconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.6" cy="6.7" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function GithubMark({ size = 18 }: SocialIconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

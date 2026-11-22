@@ -975,7 +975,7 @@ a {
   50% { transform: translateY(3px); }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1279px) {
   .projects-sticky {
     position: static;
     height: auto;
@@ -1306,7 +1306,7 @@ a {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-rows: repeat(4, 17rem);
+  grid-template-rows: repeat(4, minmax(17rem, auto));
 }
 
 .journey-timeline__item {
@@ -1440,7 +1440,7 @@ a {
 @media (max-width: 640px) {
   .journey-timeline__path--desktop { display: none; }
   .journey-timeline__path--mobile { display: block; }
-  .journey-timeline__list { grid-template-rows: repeat(4, 23.5rem); }
+  .journey-timeline__list { grid-template-rows: repeat(4, minmax(20rem, auto)); }
   .journey-timeline__card-wrap,
   .journey-timeline__item:nth-child(odd) .journey-timeline__card-wrap,
   .journey-timeline__item:nth-child(even) .journey-timeline__card-wrap {
@@ -1462,7 +1462,7 @@ a {
 }
 
 @media (max-width: 380px) {
-  .journey-timeline__list { grid-template-rows: repeat(4, 27rem); }
+  .journey-timeline__list { grid-template-rows: repeat(4, minmax(22rem, auto)); }
   .journey-timeline__card > .flex.items-start.gap-4 {
     display: block;
   }
@@ -1472,6 +1472,46 @@ a {
   .journey-timeline__card > .flex.items-start.gap-4 > div {
     width: 100%;
   }
+}
+
+/* Keep every section legible and within the viewport as the layout narrows. */
+@media (max-width: 1023px) {
+  .projects-rail-viewport { overflow: visible; }
+  .projects-rail { width: 100%; }
+}
+
+@media (max-width: 767px) {
+  html { scroll-padding-top: 4.5rem; }
+
+  .hero-name-heading {
+    font-size: clamp(2.8rem, 12vw, 4.5rem) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(odd) .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(even) .journey-timeline__card-wrap {
+    min-width: 0;
+  }
+
+  .journey-timeline__card { min-width: 0; }
+  .journey-timeline__related p,
+  .journey-timeline__card p { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 640px) {
+  .projects-rail-viewport { padding-inline: 0; }
+  .project-rail-card { width: 100%; }
+}
+
+@media (max-width: 380px) {
+  .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(odd) .journey-timeline__card-wrap,
+  .journey-timeline__item:nth-child(even) .journey-timeline__card-wrap {
+    padding-left: 3.75rem;
+  }
+
+  .journey-timeline__node { left: 1.45rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -60,7 +60,7 @@ export function ProjectsSection() {
   useEffect(() => {
     // Keep the animated horizontal rail for roomy desktop viewports. On shorter
     // screens the normal grid gives each full-height card enough vertical space.
-    const media = window.matchMedia("(min-width: 1024px) and (min-height: 820px)");
+    const media = window.matchMedia("(min-width: 1280px) and (min-height: 820px)");
     const updateLayout = () => {
       setHorizontal(media.matches);
       if (!viewportRef.current || !railRef.current || !media.matches) {

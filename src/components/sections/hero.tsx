@@ -9,13 +9,14 @@ import {
 } from "motion/react";
 import { type PointerEvent as ReactPointerEvent } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { portfolio } from "@/data/portfolio";
 import { cvFileName, cvFilePath } from "@/data/cv";
 import { LiveCodeTerminal } from "@/components/sections/live-code-terminal";
 import { CodeforcesMark, LeetCodeMark } from "@/components/ui/coding-platform-icons";
+import { InstagramMark, TelegramMark } from "@/components/ui/social-icons";
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion() ?? false;
@@ -162,6 +163,37 @@ export function Hero() {
               </span>
               <ArrowUpRight className="relative size-4 shrink-0 text-purple transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
             </motion.a>
+          </motion.div>
+
+          <motion.div {...enter(0.54)} className="mb-7 flex flex-wrap gap-2.5" aria-label="Contact links">
+            <a
+              href="https://t.me/net_amare"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram @net_amare, opens in a new tab"
+              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-blue/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-blue/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-blue/20 bg-blue/10 text-blue"><TelegramMark size={17} /></span>
+              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Telegram</span><span className="block truncate text-[11px] text-secondary">@net_amare</span></span>
+            </a>
+            <a
+              href="https://www.instagram.com/net_amare/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram @net_amare, opens in a new tab"
+              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-purple/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-purple/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-purple/20 bg-purple/10 text-purple"><InstagramMark size={17} /></span>
+              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Instagram</span><span className="block truncate text-[11px] text-secondary">@net_amare</span></span>
+            </a>
+            <a
+              href="tel:+251960236616"
+              aria-label="Call +251 960 236 616"
+              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-blue/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-blue/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-blue/20 bg-blue/10 text-blue"><Phone size={16} strokeWidth={1.8} aria-hidden="true" /></span>
+              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Phone</span><span className="block truncate text-[11px] text-secondary">+251 960 236 616</span></span>
+            </a>
           </motion.div>
 
           <motion.div {...enter(0.58)} className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
