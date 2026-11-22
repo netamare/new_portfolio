@@ -42,12 +42,12 @@ export function LiveCodeTerminal() {
   return (
     <motion.aside
       aria-label="Animated code examples for Flutter, Kotlin, and web development"
-      className="relative z-20 mt-5 hidden w-[min(22rem,86vw)] max-w-[22rem] self-center overflow-hidden rounded-2xl border border-white/10 bg-[#090b13]/90 shadow-[0_18px_55px_rgb(0_0_0_/_42%),0_0_30px_rgb(139_92_246_/_12%)] backdrop-blur-xl sm:block"
+      className="relative z-20 mt-5 hidden w-[min(18rem,78vw)] max-w-[18rem] self-center overflow-hidden rounded-2xl border border-white/10 bg-[#090b13]/90 shadow-[0_18px_55px_rgb(0_0_0_/_42%),0_0_30px_rgb(139_92_246_/_12%)] backdrop-blur-xl sm:block"
       initial={false}
       animate={reduceMotion ? undefined : { y: [0, -5, 0], rotate: [-1, 0.2, -1] }}
       transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
     >
-      <div className="flex items-center gap-2 border-b border-white/[0.07] px-4 py-3">
+      <div className="flex items-center gap-2 border-b border-white/[0.07] px-3 py-2.5">
         <span className="size-2 rounded-full bg-rose-400/80" />
         <span className="size-2 rounded-full bg-amber-300/80" />
         <span className="size-2 rounded-full bg-emerald-400/80" />
@@ -65,11 +65,11 @@ export function LiveCodeTerminal() {
         </AnimatePresence>
         <span className={`ml-auto shrink-0 font-mono text-[9px] ${example.color}`}>{example.language}</span>
       </div>
-      <div className="grid grid-cols-[1.5rem_1fr] gap-x-2 p-4 font-mono text-[10px] leading-[1.85] sm:text-[11px]">
+      <div className="grid grid-cols-[1.25rem_1fr] gap-x-2 p-3 font-mono text-[9px] leading-[1.8] sm:text-[10px]">
         <span aria-hidden="true" className="select-none text-right text-slate-600">{visibleCode.split("\n").map((_, index) => index + 1).join("\n")}</span>
         <pre aria-hidden="true" className="m-0 min-h-[5.2rem] whitespace-pre-wrap break-words text-slate-200"><code><span className="terminal-full-code">{source}</span><span className="terminal-animated-code">{visibleCode}</span><span className="terminal-caret">▍</span></code></pre>
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.07] px-4 py-2">
+      <div className="flex items-center justify-between border-t border-white/[0.07] px-3 py-1.5">
         <span className="font-mono text-[9px] text-slate-500">Netsanet Amare</span>
         <span className="inline-flex items-center gap-1.5 font-mono text-[9px] text-emerald-300/80"><span className="size-1.5 rounded-full bg-emerald-400" /> ready</span>
       </div>

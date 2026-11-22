@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useReducedMotion,
@@ -8,8 +9,9 @@ import {
   useTransform,
 } from "motion/react";
 import { type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight, ArrowUpRight, Phone } from "lucide-react";
+import { ArrowDown, ArrowRight, Code2, Phone, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { portfolio } from "@/data/portfolio";
@@ -20,6 +22,8 @@ import { InstagramMark, TelegramMark } from "@/components/ui/social-icons";
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion() ?? false;
+  const roles = ["Computer Science Student", "Software Developer", "Mobile App Developer", "Creative Thinker"];
+  const [roleIndex, setRoleIndex] = useState(0);
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const springX = useSpring(pointerX, { stiffness: 170, damping: 22, mass: 0.65 });
@@ -36,6 +40,11 @@ export function Hero() {
     pointerX.set(0);
     pointerY.set(0);
   };
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const timer = window.setInterval(() => setRoleIndex((index) => (index + 1) % roles.length), 3200);
+    return () => window.clearInterval(timer);
+  }, [shouldReduceMotion, roles.length]);
   const enter = (delay: number) =>
     ({
       initial: false as const,
@@ -65,7 +74,7 @@ export function Hero() {
       </span>
     ));
 
-    return <motion.span {...enter(delay)} className="inline-block">{letters}</motion.span>;
+    return <motion.span {...enter(delay)} className="block">{letters}</motion.span>;
   };
 
   return (
@@ -87,8 +96,8 @@ export function Hero() {
         />
       </div>
 
-      <Container className="relative grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
-        <div className="relative z-30 min-w-0 max-w-3xl">
+      <Container className="relative grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+        <div className="relative z-30 min-w-0 max-w-3xl lg:pr-14">
           <motion.div {...enter(0.12)} className="mb-6 flex items-center gap-3">
             <span className="h-px w-8 bg-gradient-to-r from-purple to-blue" />
             <span className="font-mono text-xs font-semibold tracking-[0.25em] text-blue sm:text-sm">
@@ -100,7 +109,7 @@ export function Hero() {
             id="hero-title"
             aria-label={portfolio.name}
             data-name={portfolio.name}
-            className="hero-name-heading mb-5 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] leading-[0.98]"
+            className="hero-name-heading mb-6 max-w-3xl text-balance text-[clamp(3rem,8vw,3.25rem)] font-extrabold leading-[0.96] lg:mb-7 lg:text-[7rem]"
           >
             {revealName(portfolio.firstName, 0.22)}{" "}
             {revealName(portfolio.lastName, 0.3, Array.from(portfolio.firstName).length)}
@@ -108,9 +117,21 @@ export function Hero() {
 
           <motion.p
             {...enter(0.34)}
-            className="mb-5 max-w-2xl text-lg font-medium leading-8 text-slate-200 sm:text-xl sm:leading-9"
+            aria-live="polite"
+            className="mb-5 min-h-8 max-w-2xl text-lg font-medium leading-8 text-slate-200 sm:min-h-9 sm:text-xl sm:leading-9"
           >
-            {portfolio.role}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={roles[roleIndex]}
+                className="inline-block bg-gradient-to-r from-purple via-violet-300 to-blue bg-clip-text text-transparent"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 8, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8, filter: "blur(4px)" }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: "easeOut" }}
+              >
+                {roles[roleIndex]}
+              </motion.span>
+            </AnimatePresence>
           </motion.p>
 
           <motion.p
@@ -120,80 +141,26 @@ export function Hero() {
             {portfolio.intro}
           </motion.p>
 
-          <motion.div {...enter(0.5)} className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <motion.a
-              href={portfolio.socials.leetcode.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LeetCode profile, opens in a new tab"
-              className="group relative inline-flex min-h-[4.25rem] w-full items-center gap-3 overflow-hidden rounded-2xl border border-purple/30 bg-surface/75 px-4 py-3 shadow-[0_12px_34px_rgb(0_0_0_/_18%)] backdrop-blur-md transition-[border-color,box-shadow,background-color] duration-300 hover:border-purple/65 hover:bg-surface hover:shadow-[0_16px_42px_rgb(139_92_246_/_18%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue sm:w-[14rem]"
-              style={{ transformPerspective: 700 }}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02, rotateX: 1.8, rotateY: -1.2 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 320, damping: 22 }}
+          <motion.div
+            {...enter(0.48)}
+            className="relative mb-7 inline-flex items-center gap-2.5 rounded-full border border-purple/30 bg-surface/65 px-3.5 py-2 text-xs font-medium text-slate-200 shadow-[0_0_28px_rgb(139_92_246_/_12%)] backdrop-blur-md sm:text-sm"
+          >
+            <motion.span
+              aria-hidden="true"
+              className="flex size-7 items-center justify-center rounded-full border border-blue/25 bg-blue/10 text-blue"
+              animate={shouldReduceMotion ? undefined : { rotate: [0, -8, 8, 0], scale: [1, 1.04, 1] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-purple/10 via-transparent to-blue/10 opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
-              <span className="relative flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-                <LeetCodeMark className="size-7" />
-              </span>
-              <span className="relative min-w-0 flex-1 text-left">
-                <span className="block text-sm font-semibold leading-5 text-foreground">LeetCode</span>
-                <span className="block truncate font-mono text-[11px] leading-5 text-secondary">@{portfolio.socials.leetcode.username}</span>
-              </span>
-              <ArrowUpRight className="relative size-4 shrink-0 text-blue transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-            </motion.a>
-            <motion.a
-              href={portfolio.socials.codeforces.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Codeforces profile, opens in a new tab"
-              className="group relative inline-flex min-h-[4.25rem] w-full items-center gap-3 overflow-hidden rounded-2xl border border-blue/30 bg-surface/75 px-4 py-3 shadow-[0_12px_34px_rgb(0_0_0_/_18%)] backdrop-blur-md transition-[border-color,box-shadow,background-color] duration-300 hover:border-blue/65 hover:bg-surface hover:shadow-[0_16px_42px_rgb(56_189_248_/_16%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue sm:w-[14rem]"
-              style={{ transformPerspective: 700 }}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02, rotateX: 1.8, rotateY: 1.2 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 320, damping: 22 }}
-            >
-              <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-blue/10 via-transparent to-purple/10 opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
-              <span className="relative flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
-                <CodeforcesMark className="size-7" />
-              </span>
-              <span className="relative min-w-0 flex-1 text-left">
-                <span className="block text-sm font-semibold leading-5 text-foreground">Codeforces</span>
-                <span className="block truncate font-mono text-[11px] leading-5 text-secondary">@{portfolio.socials.codeforces.username}</span>
-              </span>
-              <ArrowUpRight className="relative size-4 shrink-0 text-purple transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-            </motion.a>
-          </motion.div>
-
-          <motion.div {...enter(0.54)} className="mb-7 flex flex-wrap gap-2.5" aria-label="Contact links">
-            <a
-              href="https://t.me/net_amare"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Telegram @net_amare, opens in a new tab"
-              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-blue/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-blue/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            >
-              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-blue/20 bg-blue/10 text-blue"><TelegramMark size={17} /></span>
-              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Telegram</span><span className="block truncate text-[11px] text-secondary">@net_amare</span></span>
-            </a>
-            <a
-              href="https://www.instagram.com/net_amare/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram @net_amare, opens in a new tab"
-              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-purple/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-purple/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            >
-              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-purple/20 bg-purple/10 text-purple"><InstagramMark size={17} /></span>
-              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Instagram</span><span className="block truncate text-[11px] text-secondary">@net_amare</span></span>
-            </a>
-            <a
-              href="tel:+251960236616"
-              aria-label="Call +251 960 236 616"
-              className="group inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-xl border border-blue/25 bg-surface/65 px-3 py-2 text-sm text-slate-200 shadow-[0_8px_26px_rgb(0_0_0_/_14%)] backdrop-blur-md transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-blue/55 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            >
-              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-blue/20 bg-blue/10 text-blue"><Phone size={16} strokeWidth={1.8} aria-hidden="true" /></span>
-              <span className="min-w-0 text-left leading-tight"><span className="block text-xs font-semibold text-foreground">Phone</span><span className="block truncate text-[11px] text-secondary">+251 960 236 616</span></span>
-            </a>
+              <Code2 size={15} strokeWidth={1.8} />
+            </motion.span>
+            <span>Building Digital Experiences</span>
+            <motion.span
+              aria-hidden="true"
+              className="absolute -right-1 -top-1 size-2 rounded-full bg-blue shadow-[0_0_10px_3px_rgb(56_189_248_/_45%)]"
+              animate={shouldReduceMotion ? undefined : { y: [0, -3, 0], opacity: [0.55, 1, 0.55] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <Sparkles aria-hidden="true" size={13} className="text-purple/80" />
           </motion.div>
 
           <motion.div {...enter(0.58)} className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -221,12 +188,33 @@ export function Hero() {
               Computer Science student at Arsi University
             </span>
           </motion.div>
+
+          <nav
+            aria-label="Social links"
+            className="mt-6 flex flex-wrap gap-2 lg:absolute lg:right-0 lg:top-1/2 lg:mt-0 lg:-translate-y-1/2 lg:flex-col lg:gap-2.5"
+          >
+            <a href="https://t.me/net_amare" target="_blank" rel="noopener noreferrer" aria-label="Telegram @net_amare, opens in a new tab" title="Telegram · @net_amare" className="group relative grid size-[2.65rem] shrink-0 place-items-center rounded-xl border border-white/10 bg-surface/65 text-blue shadow-[0_8px_20px_rgb(0_0_0_/_15%)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-blue/45 hover:shadow-[0_10px_24px_rgb(0_0_0_/_22%),0_0_18px_rgb(56_189_248_/_12%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+              <TelegramMark size={19} /><span role="tooltip" className="pointer-events-none absolute left-0 top-full z-40 mt-2 hidden w-max max-w-56 rounded-lg border border-border bg-[#08090f]/95 px-2.5 py-1.5 text-[11px] font-medium leading-4 text-foreground shadow-xl group-hover:block group-focus-visible:block lg:left-full lg:top-1/2 lg:ml-2 lg:mt-0 lg:-translate-y-1/2">Telegram · @net_amare</span>
+            </a>
+            <a href="https://www.instagram.com/net_amare/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @net_amare, opens in a new tab" title="Instagram · @net_amare" className="group relative grid size-[2.65rem] shrink-0 place-items-center rounded-xl border border-white/10 bg-surface/65 text-purple shadow-[0_8px_20px_rgb(0_0_0_/_15%)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-purple/45 hover:shadow-[0_10px_24px_rgb(0_0_0_/_22%),0_0_18px_rgb(139_92_246_/_12%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+              <InstagramMark size={19} /><span role="tooltip" className="pointer-events-none absolute left-0 top-full z-40 mt-2 hidden w-max max-w-56 rounded-lg border border-border bg-[#08090f]/95 px-2.5 py-1.5 text-[11px] font-medium leading-4 text-foreground shadow-xl group-hover:block group-focus-visible:block lg:left-full lg:top-1/2 lg:ml-2 lg:mt-0 lg:-translate-y-1/2">Instagram · @net_amare</span>
+            </a>
+            <a href="tel:+251960236616" aria-label="Call +251 960 236 616" title="Phone · +251 960 236 616" className="group relative grid size-[2.65rem] shrink-0 place-items-center rounded-xl border border-white/10 bg-surface/65 text-blue shadow-[0_8px_20px_rgb(0_0_0_/_15%)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-blue/45 hover:shadow-[0_10px_24px_rgb(0_0_0_/_22%),0_0_18px_rgb(56_189_248_/_12%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+              <Phone size={18} strokeWidth={1.8} aria-hidden="true" /><span role="tooltip" className="pointer-events-none absolute left-0 top-full z-40 mt-2 hidden w-max max-w-56 rounded-lg border border-border bg-[#08090f]/95 px-2.5 py-1.5 text-[11px] font-medium leading-4 text-foreground shadow-xl group-hover:block group-focus-visible:block lg:left-full lg:top-1/2 lg:ml-2 lg:mt-0 lg:-translate-y-1/2">Phone · +251 960 236 616</span>
+            </a>
+            <a href="https://codeforces.com/profile/netsiamre21" target="_blank" rel="noopener noreferrer" aria-label="Codeforces profile, opens in a new tab" title="Codeforces · @netsiamre21" className="group relative grid size-[2.65rem] shrink-0 place-items-center rounded-xl border border-white/10 bg-surface/65 text-blue shadow-[0_8px_20px_rgb(0_0_0_/_15%)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-blue/45 hover:shadow-[0_10px_24px_rgb(0_0_0_/_22%),0_0_18px_rgb(56_189_248_/_12%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+              <CodeforcesMark className="size-5" /><span role="tooltip" className="pointer-events-none absolute left-0 top-full z-40 mt-2 hidden w-max max-w-56 rounded-lg border border-border bg-[#08090f]/95 px-2.5 py-1.5 text-[11px] font-medium leading-4 text-foreground shadow-xl group-hover:block group-focus-visible:block lg:left-full lg:top-1/2 lg:ml-2 lg:mt-0 lg:-translate-y-1/2">Codeforces · @netsiamre21</span>
+            </a>
+            <a href="https://leetcode.com/u/net_amare/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode profile, opens in a new tab" title="LeetCode · @net_amare" className="group relative grid size-[2.65rem] shrink-0 place-items-center rounded-xl border border-white/10 bg-surface/65 text-orange-300 shadow-[0_8px_20px_rgb(0_0_0_/_15%)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-purple/45 hover:shadow-[0_10px_24px_rgb(0_0_0_/_22%),0_0_18px_rgb(139_92_246_/_12%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+              <LeetCodeMark className="size-5" /><span role="tooltip" className="pointer-events-none absolute left-auto right-0 top-full z-40 mt-2 hidden w-max max-w-56 rounded-lg border border-border bg-[#08090f]/95 px-2.5 py-1.5 text-[11px] font-medium leading-4 text-foreground shadow-xl group-hover:block group-focus-visible:block lg:left-full lg:right-auto lg:top-1/2 lg:ml-2 lg:mt-0 lg:-translate-y-1/2">LeetCode · @net_amare</span>
+            </a>
+          </nav>
         </div>
 
-        <div className="relative mx-auto flex min-w-0 w-full max-w-[28rem] flex-col items-center justify-center lg:max-w-none">
-        <div className="relative flex h-[min(88vw,30rem)] w-full items-center justify-center sm:h-[31rem] lg:h-[31rem]">
+        <div className="relative mx-auto flex min-w-0 w-full max-w-[42rem] flex-col items-center justify-center lg:max-w-none">
+        <div className="relative flex h-[min(98vw,40rem)] w-full items-center justify-center sm:h-[42rem] lg:h-[44rem]">
           <motion.div
-            className="profile-orbit-frame relative z-20 aspect-square w-[min(86%,24rem)] rounded-full p-[3px] [transform-style:preserve-3d]"
+            className="profile-photo-blend relative z-20 aspect-square w-full max-w-[18rem] rounded-full border border-purple/30 bg-surface/70 p-2 shadow-[0_0_44px_rgb(139_92_246_/_18%),0_0_70px_rgb(56_189_248_/_12%)] sm:max-w-[26rem] lg:max-w-[31.25rem] [transform-style:preserve-3d]"
             initial={false}
             onPointerMove={handlePhotoPointerMove}
             onPointerLeave={resetPhotoPointer}
@@ -242,20 +230,21 @@ export function Hero() {
               y: { duration: shouldReduceMotion ? 0 : 8, repeat: shouldReduceMotion ? 0 : Infinity, ease: "easeInOut" },
             }}
           >
-            <div className="relative z-10 size-full overflow-hidden rounded-full border border-white/15 bg-surface">
+            <div className="relative z-10 size-full overflow-hidden rounded-full">
               <motion.div
-                className="size-full"
+                className="relative size-full overflow-hidden rounded-full"
                 animate={shouldReduceMotion ? undefined : { y: [0, -5, 0], scale: [1, 1.015, 1] }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Image
-                  src={portfolio.photo}
+                  src="/images/net.png"
                   alt={portfolio.name}
-                  width={956}
-                  height={1320}
+                  width={1672}
+                  height={1064}
                   priority
-                  sizes="(max-width: 1024px) 78vw, 384px"
-                  className="h-full w-full object-cover object-top"
+                  unoptimized
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 80vw, 512px"
+                  className="size-full rounded-full object-cover"
                 />
               </motion.div>
             </div>
@@ -267,13 +256,15 @@ export function Hero() {
 
       <motion.a
         href="#about"
-        className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 items-center gap-2 rounded-full px-3 py-2 text-xs text-secondary transition-colors hover:text-foreground sm:flex"
+        aria-label="Scroll to explore"
+        className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full px-3 py-2 text-xs text-secondary transition-colors hover:text-foreground"
         initial={false}
         animate={shouldReduceMotion ? undefined : { opacity: [0.7, 1], y: [6, 0] }}
         transition={{ duration: 0.7, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         whileHover={shouldReduceMotion ? undefined : { y: -2 }}
       >
-        Scroll to explore <ArrowDown size={14} aria-hidden="true" />
+        <span className="projects-scroll-icon" aria-hidden="true"><ArrowDown size={14} /></span>
+        <span className="hidden sm:inline">Scroll to explore</span>
       </motion.a>
     </section>
   );
